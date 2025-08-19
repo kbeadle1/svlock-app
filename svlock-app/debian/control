@@ -1,0 +1,27 @@
+Source: svlock-app
+Section: Intel
+Priority: Optional
+Maintainer: Kevin Beadle <kevin.beadle@intel.com>
+Standards-Version: 3.9.3
+Homepage: https://gitlab.devtools.intel.com/svos/simics/svlock-app
+Build-Depends: debhelper (>= 9),
+    kmod,
+    gcc-4.6|gcc,
+    svfs-modules-dev
+
+
+Package: svlock-app
+Architecture: amd64
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: svlock-app user space controls
+
+
+Package: svlock-app-dev
+Architecture: amd64
+Description: These are the svlock-app headers.
+
+
+Package: svlock-app-doc
+Architecture: amd64
+Description: This is the svlock-app documentation.
+

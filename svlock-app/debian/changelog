@@ -1,0 +1,5 @@
+svlock-app (1.0.0) svos; urgency=low
+
+  * package svlock-app
+
+ -- Kevin Beadle <kevin.beadle@intel.com>  Mon, 07 Jul 2025 15:01:36 +0000
