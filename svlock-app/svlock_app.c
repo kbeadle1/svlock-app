@@ -22,6 +22,7 @@
 #define MAX_RESOURCES 3
 
 sem_t semaphore; // Declare a semaphore variable
+SvlockData svlock;
 int *g_file_desc;
 
 // driver load/unload
@@ -398,6 +399,46 @@ void testThread3(int file_desc, int nlocks, int tag, int pid, int tid) {
 	for (int i = 0; i < NUM_THREADS; i++) {
 		thread_args[i] = i;
 		pthread_create(&threads[i], NULL, thread_function3, &thread_args[i]);
+	}
+
+	// Join threads
+	for (int i = 0; i < NUM_THREADS; i++) {
+		pthread_join(threads[i], NULL);
+	}
+
+	// Destroy semaphore
+	//sem_destroy(&semaphore);
+    	//ioctl(*g_file_desc, SVLOCK_IOCTL_DEINIT, &svlock_param);
+}
+
+// macros
+void *thread_function4(void *arg) {
+	int thread_num = *((int*)arg);
+	
+	//sem_wait(&semaphore);
+	svlock_global_wait(*g_file_desc);
+	printf("Thread %d: Entering critical section.\n", thread_num);
+	sleep(2);
+	printf("Thread %d: Leaving critical section.\n", thread_num);
+	//sem_post(&semaphore);
+	svlock_global_release(*g_file_desc);
+	return NULL;
+}
+
+// counting semaphore
+void testThread4(int file_desc, int nlocks, int tag, int pid, int tid) {
+	pthread_t threads[NUM_THREADS];
+	int thread_args[NUM_THREADS];
+
+	g_file_desc = &file_desc;
+
+	// Initialize semaphore with MAX_RESOURCES available at start
+	//sem_init(&semaphore, 0, MAX_RESOURCES);
+	svlock_global_init(*g_file_desc, MAX_RESOURCES);
+	// Create threads
+	for (int i = 0; i < NUM_THREADS; i++) {
+		thread_args[i] = i;
+		pthread_create(&threads[i], NULL, thread_function4, &thread_args[i]);
 	}
 
 	// Join threads
@@ -871,7 +912,8 @@ main(int argc, char **argv)
         //testLock(file_desc, nlocks, tag, pid, tid);
         //testThread(file_desc, nlocks, tag, pid, tid);
         //testThread2(file_desc, nlocks, tag, pid, tid);
-        testThread3(file_desc, nlocks, tag, pid, tid);
+        //testThread3(file_desc, nlocks, tag, pid, tid);
+        testThread4(file_desc, nlocks, tag, pid, tid);
         close(file_desc);
     }
     if (test2_cmd) {
