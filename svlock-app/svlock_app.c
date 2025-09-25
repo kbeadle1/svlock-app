@@ -7,19 +7,22 @@
  *
  */
 
+#include <stdio.h>
 #include <sys/types.h>
 #include <unistd.h>
-#include "svlock_app.h"
 #include <pthread.h>
 #include <semaphore.h>
+#include <time.h>
+#include "svlock_app.h"
 
 // #ifdef CONFIG_SVOS
 //#include <sv/svlib.h>
 //#include <sv/sv.h>
 // #endif
 
-#define NUM_THREADS 5
-#define MAX_RESOURCES 3
+#define NUM_THREADS 6
+#define MAX_RESOURCES 6
+#define THREAD_WORKTIME 5
 
 sem_t semaphore; // Declare a semaphore variable
 SvlockData svlock;
@@ -203,7 +206,7 @@ void *pthread_function(void *arg) {
 	printf("Thread: Semaphore acquired, entering critical section.\n");
 	// Critical section: Access shared resource
 	printf("Thread: Performing work in critical section...\n");
-	sleep(2); // Simulate work
+	sleep(THREAD_WORKTIME); // Simulate work
 	printf("Thread: Releasing semaphore.\n");
 	sem_post(&semaphore); // Increment semaphore, potentially unblocking a waiting thread
 	return NULL;
@@ -227,10 +230,13 @@ void testPthread() {
 
 void *pthread_function2(void *arg) {
 	int thread_num = *((int*)arg);
+	pid_t pid = getpid();
 	sem_wait(&semaphore);
-	printf("Thread %d: Entering critical section.\n", thread_num);
-	sleep(2);
-	printf("Thread %d: Leaving critical section.\n", thread_num);
+	//printf("Thread %d: Entering critical section.\n", thread_num);
+	printf("PID %d Thread %d: Entering critical section.\n", pid, thread_num);
+	sleep(THREAD_WORKTIME);
+	//printf("Thread %d: Leaving critical section.\n", thread_num);
+	printf("PID %d Thread %d: Leaving critical section.\n", pid, thread_num);
 	sem_post(&semaphore);
 	return NULL;
 }
@@ -271,7 +277,7 @@ void *thread_function(void *arg) {
 	printf("Thread: Semaphore acquired, entering critical section.\n");
 	// Critical section: Access shared resource
 	printf("Thread: Performing work in critical section...\n");
-	sleep(2); // Simulate work
+	sleep(THREAD_WORKTIME); // Simulate work
 	printf("Thread: Releasing semaphore.\n");
 	//sem_post(&semaphore); // Increment semaphore, potentially unblocking a waiting thread
     	ioctl(*g_file_desc, SVLOCK_IOCTL_RELEASE, &svlock_param);
@@ -319,7 +325,7 @@ void *thread_function2(void *arg) {
     		ioctl(*g_file_desc, SVLOCK_IOCTL_ACQUIRE, &svlock_param);
 	}
 	printf("Thread %d: Entering critical section.\n", thread_num);
-	sleep(2);
+	sleep(THREAD_WORKTIME);
 	printf("Thread %d: Leaving critical section.\n", thread_num);
 	//sem_post(&semaphore);
     	ioctl(*g_file_desc, SVLOCK_IOCTL_RELEASE, &svlock_param);
@@ -372,7 +378,7 @@ void *thread_function3(void *arg) {
     		ioctl(*g_file_desc, SVLOCK_IOCTL_ACQUIRE, &svlock_param);
 	}
 	printf("Thread %d: Entering critical section.\n", thread_num);
-	sleep(2);
+	sleep(THREAD_WORKTIME);
 	printf("Thread %d: Leaving critical section.\n", thread_num);
 	//sem_post(&semaphore);
     	ioctl(*g_file_desc, SVLOCK_IOCTL_RELEASE, &svlock_param);
@@ -414,12 +420,15 @@ void testThread3(int file_desc, int nlocks, int tag, int pid, int tid) {
 // macros
 void *thread_function4(void *arg) {
 	int thread_num = *((int*)arg);
+	pid_t pid = getpid();
 	
 	//sem_wait(&semaphore);
 	svlock_global_wait(*g_file_desc);
-	printf("Thread %d: Entering critical section.\n", thread_num);
-	sleep(2);
-	printf("Thread %d: Leaving critical section.\n", thread_num);
+	//printf("Thread %d: Entering critical section.\n", thread_num);
+	printf("PID %d Thread %d: Entering critical section.\n", pid, thread_num);
+	sleep(THREAD_WORKTIME);
+	//printf("Thread %d: Leaving critical section.\n", thread_num);
+	printf("PID %d Thread %d: Leaving critical section.\n", pid, thread_num);
 	//sem_post(&semaphore);
 	svlock_global_release(*g_file_desc);
 	return NULL;
@@ -722,7 +731,7 @@ processArgs(int argc, char **argv)
         {"pid", 1, 0, 1}, // 15
         {"tid", 1, 0, 1}, // 16
         {"test", no_argument, &test_cmd, 1}, // 17
-        {"test2", no_argument, &test2_cmd, 1}, // 18
+        {"posix", no_argument, &posix_cmd, 1}, // 18
         {"releaseall", no_argument, &releaseall_cmd, 1}, // 19
         {"deinitall", no_argument, &deinitall_cmd, 1}, // 20
         {0, 0, 0, 0}  // terminating element
@@ -759,7 +768,7 @@ processArgs(int argc, char **argv)
             case 11: // deinit
             case 12: // list
             case 17: // test
-            case 18: // test2
+            case 18: // posix
             case 19: // releaseall
             case 20: // deinitall
                 break;
@@ -804,7 +813,11 @@ main(int argc, char **argv)
     return_code = initializeDefaults();
     processArgs(argc, argv);
 
+
     return_code = svlockCheckAndLoadDriver();
+
+    time_t start_time, end_time;
+    double elapsed_seconds;
 
     if (unload_driver) {
         return svlockUnloadSvlockDriver();
@@ -909,25 +922,34 @@ main(int argc, char **argv)
             printf("Can't open device file: %s\n", SVLOCK_DEVICE_PATH);
             exit(-1);
         }
+    	start_time = time(NULL);
         //testLock(file_desc, nlocks, tag, pid, tid);
         //testThread(file_desc, nlocks, tag, pid, tid);
         //testThread2(file_desc, nlocks, tag, pid, tid);
         //testThread3(file_desc, nlocks, tag, pid, tid);
         testThread4(file_desc, nlocks, tag, pid, tid);
-        close(file_desc);
+        end_time = time(NULL);
+        elapsed_seconds = difftime(end_time, start_time);
+        printf("Elapsed time: %.2f seconds\n", elapsed_seconds);
+	close(file_desc);
     }
-    if (test2_cmd) {
+    if (posix_cmd) {
         file_desc = open(SVLOCK_DEVICE_PATH, 0);
 
         if (file_desc < 0) {
             printf("Can't open device file: %s\n", SVLOCK_DEVICE_PATH);
             exit(-1);
         }
+    	start_time = time(NULL);
         //testLock(file_desc, nlocks, pid, tid);
         //testPthread();
         testPthread2();
-        close(file_desc);
+        end_time = time(NULL);
+        elapsed_seconds = difftime(end_time, start_time);
+        printf("Elapsed time: %.2f seconds\n", elapsed_seconds);
+	close(file_desc);
     }
+
 
     return return_code;
 }

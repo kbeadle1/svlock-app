@@ -39,7 +39,7 @@ const char *usage =
         "          [--pid <pid>]\n"
         "          [--tid <tid>]\n"
         "          [--test]\n"
-        "          [--test2]\n"
+        "          [--posix]\n"
 ;
 
 static int do_log = 0;
@@ -57,7 +57,7 @@ static int release_cmd = 0;
 static int deinit_cmd = 0;
 static int list_cmd = 0;
 static int test_cmd = 0;
-static int test2_cmd = 0;
+static int posix_cmd = 0;
 static int releaseall_cmd = 0;
 static int deinitall_cmd = 0;
 static uint64_t nlocks = 0;
