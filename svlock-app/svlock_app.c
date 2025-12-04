@@ -13,6 +13,8 @@
 #include <pthread.h>
 #include <semaphore.h>
 #include <time.h>
+#include <fcntl.h>
+#include <sys/mman.h>
 #include "svlock_app.h"
 
 // #ifdef CONFIG_SVOS
@@ -20,13 +22,24 @@
 //#include <sv/sv.h>
 // #endif
 
-#define NUM_THREADS 6
-#define MAX_RESOURCES 6
+#define NUM_THREADS 5
+#define MAX_RESOURCES 1
 #define THREAD_WORKTIME 5
+#define SVLOCK_MAX_SEMAPHORES 1024
+
+typedef struct svlock_t
+{
+    sem_t semaphore[SVLOCK_MAX_SEMAPHORES];
+    int initialized[SVLOCK_MAX_SEMAPHORES];
+    int count;
+} svlock_t;
 
 sem_t semaphore; // Declare a semaphore variable
+sem_t *named_semaphore;
+svlock_t *shm_svlock;
 SvlockData svlock;
 int *g_file_desc;
+
 
 // driver load/unload
 static int
@@ -460,6 +473,93 @@ void testThread4(int file_desc, int nlocks, int tag, int pid, int tid) {
     	//ioctl(*g_file_desc, SVLOCK_IOCTL_DEINIT, &svlock_param);
 }
 
+// named semaphore
+void *thread_function5(void *arg) {
+	int thread_num = *((int*)arg);
+	pid_t pid = getpid();
+	
+	sem_wait(named_semaphore);
+	//printf("Thread %d: Entering critical section.\n", thread_num);
+	printf("PID %d Thread %d: Entering critical section.\n", pid, thread_num);
+	sleep(THREAD_WORKTIME);
+	//printf("Thread %d: Leaving critical section.\n", thread_num);
+	printf("PID %d Thread %d: Leaving critical section.\n", pid, thread_num);
+	sem_post(named_semaphore);
+	return NULL;
+}
+
+void testThread5(int file_desc, int nlocks, int tag, int pid, int tid) {
+	pthread_t threads[NUM_THREADS];
+	int thread_args[NUM_THREADS];
+	char *name = "svos_global_semaphore";
+
+	// Initialize semaphore with MAX_RESOURCES available at start
+	named_semaphore = sem_open(name, O_CREAT, 0666, MAX_RESOURCES);
+	// Create threads
+	for (int i = 0; i < NUM_THREADS; i++) {
+		thread_args[i] = i;
+		pthread_create(&threads[i], NULL, thread_function5, &thread_args[i]);
+	}
+
+	// Join threads
+	for (int i = 0; i < NUM_THREADS; i++) {
+		pthread_join(threads[i], NULL);
+	}
+
+	// Destroy semaphore
+	sem_close(named_semaphore);
+	sem_unlink(name);
+}
+
+// shm semaphore
+void *thread_function6(void *arg) {
+	int thread_num = *((int*)arg);
+	pid_t pid = getpid();
+	
+	sem_wait(&shm_svlock->semaphore[0]);
+	//printf("Thread %d: Entering critical section.\n", thread_num);
+	printf("PID %d Thread %d: Entering critical section.\n", pid, thread_num);
+	sleep(THREAD_WORKTIME);
+	//printf("Thread %d: Leaving critical section.\n", thread_num);
+	printf("PID %d Thread %d: Leaving critical section.\n", pid, thread_num);
+	sem_post(&shm_svlock->semaphore[0]);
+	return NULL;
+}
+
+void testThread6(int file_desc, int nlocks, int tag, int pid, int tid) {
+	pthread_t threads[NUM_THREADS];
+	int thread_args[NUM_THREADS];
+	char *path_name = "/svos_global_semaphore";
+	int fd;
+
+	fd = shm_open(path_name, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR);
+
+	ftruncate(fd, sizeof(svlock_t));
+
+	shm_svlock = mmap(NULL, sizeof(svlock_t), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+
+	// Initialize semaphore with MAX_RESOURCES available at start
+	if (!shm_svlock->initialized[0]) {
+	    sem_init(&shm_svlock->semaphore[0], 1, MAX_RESOURCES);
+	    shm_svlock->initialized[0] = 1;
+	}
+
+	// Create threads
+	for (int i = 0; i < NUM_THREADS; i++) {
+		thread_args[i] = i;
+		pthread_create(&threads[i], NULL, thread_function6, &thread_args[i]);
+	}
+
+	// Join threads
+	for (int i = 0; i < NUM_THREADS; i++) {
+		pthread_join(threads[i], NULL);
+	}
+
+	// Destroy semaphore
+	sem_close(&shm_svlock->semaphore[0]);
+	shm_unlink(path_name);
+}
+
 #if 0
 void ioctlAllocateMemoryTargets()
 {
@@ -681,6 +781,9 @@ initializeDefaults(void)
     release_cmd = 0;
     releaseall_cmd = 0;
     list_cmd = 0;
+    posix_cmd = 0;
+    named_cmd = 0;
+    shm_cmd = 0;
     nlocks = 0;
     tag = 0;
     pid = 0;
@@ -732,8 +835,10 @@ processArgs(int argc, char **argv)
         {"tid", 1, 0, 1}, // 16
         {"test", no_argument, &test_cmd, 1}, // 17
         {"posix", no_argument, &posix_cmd, 1}, // 18
-        {"releaseall", no_argument, &releaseall_cmd, 1}, // 19
-        {"deinitall", no_argument, &deinitall_cmd, 1}, // 20
+        {"named", no_argument, &named_cmd, 1}, // 19
+        {"shm", no_argument, &shm_cmd, 1}, // 20
+        {"releaseall", no_argument, &releaseall_cmd, 1}, // 21
+        {"deinitall", no_argument, &deinitall_cmd, 1}, // 22
         {0, 0, 0, 0}  // terminating element
     };
     argCount = 0;
@@ -769,8 +874,10 @@ processArgs(int argc, char **argv)
             case 12: // list
             case 17: // test
             case 18: // posix
-            case 19: // releaseall
-            case 20: // deinitall
+            case 19: // named
+            case 20: // shm
+            case 21: // releaseall
+            case 22: // deinitall
                 break;
             case 1: // halt return code
                 halt_return_code = strtol(optarg, NULL, 16);
@@ -814,7 +921,9 @@ main(int argc, char **argv)
     processArgs(argc, argv);
 
 
-    return_code = svlockCheckAndLoadDriver();
+    if (!named_cmd && !shm_cmd && !posix_cmd) {
+        return_code = svlockCheckAndLoadDriver();
+    }
 
     time_t start_time, end_time;
     double elapsed_seconds;
@@ -934,12 +1043,6 @@ main(int argc, char **argv)
 	close(file_desc);
     }
     if (posix_cmd) {
-        file_desc = open(SVLOCK_DEVICE_PATH, 0);
-
-        if (file_desc < 0) {
-            printf("Can't open device file: %s\n", SVLOCK_DEVICE_PATH);
-            exit(-1);
-        }
     	start_time = time(NULL);
         //testLock(file_desc, nlocks, pid, tid);
         //testPthread();
@@ -947,7 +1050,20 @@ main(int argc, char **argv)
         end_time = time(NULL);
         elapsed_seconds = difftime(end_time, start_time);
         printf("Elapsed time: %.2f seconds\n", elapsed_seconds);
-	close(file_desc);
+    }
+    if (named_cmd) {
+    	start_time = time(NULL);
+        testThread5(file_desc, nlocks, tag, pid, tid);
+        end_time = time(NULL);
+        elapsed_seconds = difftime(end_time, start_time);
+        printf("Elapsed time: %.2f seconds\n", elapsed_seconds);
+    }
+    if (shm_cmd) {
+    	start_time = time(NULL);
+        testThread6(file_desc, nlocks, tag, pid, tid);
+        end_time = time(NULL);
+        elapsed_seconds = difftime(end_time, start_time);
+        printf("Elapsed time: %.2f seconds\n", elapsed_seconds);
     }
 
 
