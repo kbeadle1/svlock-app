@@ -1,0 +1,25 @@
+all: svlock.py
+
+svlock.swg: getapi
+
+svlock_wrap.c: svlock.swg ../svlock/libsvlock.la
+	swig -python svlock.swg
+	[ -d svlock ] || mkdir svlock
+	cp svlock.py svlock/__init__.py
+
+svlock.py: svlock_wrap.c setup.py ../svlock/libsvlock.la
+	set -e ; set -x ; for p in $$(py3versions -r ../debian/control) ; do \
+		CFLAGS="" $$p setup.py build ; \
+	done
+
+install:
+	set -e ; set -x ; for p in $$(py3versions -r ../debian/control) ; do \
+		$$p setup.py install --install-layout=deb --root=$(DESTDIR) ; \
+	done
+
+clean:
+	$(RM) -f svlock.py svlock/svlock.py svlock_wrap.c *.i
+	$(RM) -rf build
+
+getapi::
+	cpp -DSWIG -I.. ../svlock/svlock.h >svlock.i

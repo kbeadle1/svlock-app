@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<descriptor>
+
+/* Primary sections */
+
+<version>
+    4.0
+</version>
+
+<headers>
+    /* The list of paths to header files and/or
+       directories with header files, one per line */
+libosv/osvapi.h
+</headers>
+
+<libs>
+    /* The list of paths to shared libraries (*.so) and/or
+       directories with shared libraries, one per line */
+debian/tmp/usr/lib/libosv.so
+</libs>
+
+/* Optional sections */
+
+<include_paths>
+    /* The list of include paths that will be provided
+       to GCC to compile library headers, one per line.
+       NOTE: If you define this section then the tool
+       will not automatically generate include paths */
+</include_paths>
+
+<add_include_paths>
+    /* The list of include paths that will be added
+       to the automatically generated include paths, one per line */
+</add_include_paths>
+
+<skip_include_paths>
+    /* The list of include paths that will be removed from the
+       list of automatically generated include paths, one per line */
+</skip_include_paths>
+
+<gcc_options>
+    /* Additional GCC options, one per line */
+</gcc_options>
+
+<include_preamble>
+    /* The list of header files that will be
+       included before other headers, one per line  */
+</include_preamble>
+
+<defines>
+    /* The list of defines that will be added at the
+       headers compiling stage, one per line:
+          #define A B
+          #define C D */
+</defines>
+
+<add_namespaces>
+    /* The list of namespaces that should be added to the alanysis
+       if the tool cannot find them automatically, one per line */
+</add_namespaces>
+
+<skip_types>
+    /* The list of data types, that
+       should not be checked, one per line */
+</skip_types>
+
+<skip_symbols>
+    /* The list of functions (mangled/symbol names in C++),
+       that should not be checked, one per line */
+</skip_symbols>
+
+<skip_namespaces>
+    /* The list of C++ namespaces, that
+       should not be checked, one per line */
+</skip_namespaces>
+
+<skip_constants>
+    /* The list of constants that should
+       not be checked, one name per line */
+</skip_constants>
+
+<skip_headers>
+    /* The list of header files and/or directories
+       with header files that should not be checked, one per line */
+</skip_headers>
+
+<skip_libs>
+    /* The list of shared libraries and/or directories
+       with shared libraries that should not be checked, one per line */
+</skip_libs>
+
+<skip_including>
+    /* The list of header files, that cannot be included
+       directly (or non-self compiled ones), one per line */
+</skip_including>
+
+<search_headers>
+    /* List of directories to be searched
+       for header files to automatically
+       generate include paths, one per line. */
+</search_headers>
+
+<search_libs>
+    /* List of directories to be searched
+       for shared librariess to resolve
+       dependencies, one per line */
+</search_libs>
+
+<tools>
+    /* List of directories with tools used
+       for analysis (GCC toolchain), one per line */
+</tools>
+
+<cross_prefix>
+    /* GCC toolchain prefix.
+       Examples:
+           arm-linux-gnueabi
+           arm-none-symbianelf */
+</cross_prefix>
+
+</descriptor>

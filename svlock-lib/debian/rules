@@ -1,0 +1,77 @@
+#!/usr/bin/make -f
+# GNU copyright 1997 to 1999 by Joey Hess.
+CHANGES_FILE = ../svlock.changes
+
+
+configure: configure-stamp
+configure-stamp:
+	dh_testdir
+	cp /usr/share/misc/config.sub /usr/share/misc/config.guess .
+	libtoolize -c -f
+	autoreconf -f -i
+	./configure --prefix=/usr \
+		    --mandir=/usr/share/man \
+		    --infodir=/usr/share/info 
+	touch configure-stamp
+
+build: build-arch
+build-arch: build-stamp
+	$(MAKE) check
+
+check:
+	$(MAKE) check
+
+build-stamp: configure
+	dh_testdir
+	dh_prep
+	$(MAKE) -j 4
+	touch build-stamp
+
+clean:
+	dh_testdir
+	dh_testroot
+	rm -f build-stamp configure-stamp $(CHANGES_FILE)
+	[ ! -f Makefile ] || $(MAKE) distclean
+	rm -f config.sub config.guess \
+	  Makefile config.log config.status configure config.h.in \
+	  INSTALL missing install-sh depcomp ltmain.sh aclocal.m4 mkinstalldirs
+	find . -name Makefile.in -print0 | xargs -0r -- rm
+	dh_clean
+
+install: build
+	dh_testdir
+	dh_testroot
+	dh_installdirs -A
+	$(MAKE) install DESTDIR=$(CURDIR)/debian/tmp
+	#dh_python3
+
+binary: binary-indep binary-arch
+binary-indep: install
+binary-arch: install
+	dh_testdir
+	dh_testroot
+	dh_install
+	dh_missing --fail-missing
+	dh_link
+	#dh_acc
+	dh_lintian
+	dh_strip
+	dh_compress
+	dh_fixperms
+	dh_makeshlibs
+	dh_shlibdeps
+	dh_installdeb
+	dh_gencontrol
+	dh_md5sums
+	dh_builddeb
+
+.PHONY: build clean binary-indep binary-arch binary install configure push check
+
+rebuild-abi:
+	abi-compliance-checker -l svlock  -dump debian/svlock.acc -dump-path debian/svlock.abi.tar.gz
+
+# Convenience target for developers
+push:
+	dpkg-genchanges -b >$(CHANGES_FILE)
+	reprepro -b $$HOME/public_html include svlock $(CHANGES_FILE)
+

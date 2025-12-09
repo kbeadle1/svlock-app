@@ -1,0 +1,46 @@
+Source: svlock
+Section: libdevel
+Priority: optional
+Maintainer: OSV Team <sys_svos@intel.com>
+Build-Depends: debhelper (>= 10), libxml2-dev, pkg-config,
+	autotools-dev, libtool, autoconf, autogen, automake,
+	dh-acc, dh-python,
+	swig, cproto, python3-all-dev, python3-setuptools, doxygen
+Homepage: http://svosdev.so.intel.com/
+Standards-Version: 3.8.3
+X-Python3-Version: >= 3.6
+
+Package: svlock
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}
+Description: svlock library
+
+Package: svlock-dev
+Architecture: any
+Depends: svlock (= ${binary:Version}), libc6-dev, libxml2-dev
+Description: Development files for libosv
+ libOSV is a collection of interfaces needed by OSV test apps.
+
+Package: svlock-doc
+Architecture: all
+Depends: 
+Description: Documentation files for svlock
+
+Package: svlock-cli
+Architecture: any
+Depends: svlock (= ${binary:Version}), ${shlibs:Depends}
+Description: CLI application for svlock
+
+Package: svlock-unit-tests
+Architecture: any
+Depends: svlock (= ${binary:Version}), ${shlibs:Depends}
+Description: Basic unit tests for the OS based validation library
+ libOSV is a collection of interfaces needed by OSV test apps.
+
+Package: python3-svlock
+Architecture: any
+Section: python
+Depends: ${python3:Depends}, ${shlibs:Depends}
+Description: Python bindings for svlock (Python 3)
+

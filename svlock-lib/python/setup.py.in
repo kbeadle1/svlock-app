@@ -1,0 +1,54 @@
+# setup.py - Distutils interface to build, install and distribute
+# libosv library extension
+import sys, os
+from os import path
+
+def getenv_list(var_name):
+    from os import getenv
+    var = getenv(var_name)
+    if var:
+        return var.split()
+    else:
+        return []
+
+from distutils.core import setup, Extension
+from distutils.command.build import build
+from distutils.command.sdist import sdist
+
+pack_name = "svlock"
+ext_name = "_svlock"
+platform = sys.platform
+
+# Lists of include dirs, pre-processor macros, libraries at link-time
+# (build_ext).
+incl_dirs = [".", ".."]
+macros = [("PIC", None), ]
+comp_args = getenv_list('CPPFLAGS') + getenv_list('CXXFLAGS')
+link_args = getenv_list('LDFLAGS')
+libs = ["svlock","pthread"]
+
+# List of source files
+src_list = [ 'svlock_wrap.c' ]
+
+sources = [ 'svlock_wrap.c' ]
+
+try:   
+    from version import VERSION
+except:
+    VERSION = "1.0"
+
+dist = setup(name = 'python-@PACKAGE_NAME@',
+             version='@PACKAGE_VERSION@',
+             description = "svlock library (python extension)",
+             author = 'ACE EVO Team, Intel.',
+             author_email = 'kevin.beadle@intel.com',
+             url = 'http://svosdev.so.intel.com/',
+             packages = ['svlock'],
+             ext_package = pack_name,
+             ext_modules = [Extension (ext_name, src_list,
+                                       include_dirs = incl_dirs,
+                                       define_macros = macros,
+                                       libraries = libs,
+                                       extra_compile_args = comp_args,
+                                       extra_link_args = link_args
+                     ) ] ,)

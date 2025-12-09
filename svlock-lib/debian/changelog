@@ -1,0 +1,5 @@
+svlock (0.0-1) osv; urgency=low
+
+  * Initial release.
+
+ -- kevin.beadle <kevin.beadle@intel.com>  Fri, 05 Dec 2025 10:27:13 -0400
