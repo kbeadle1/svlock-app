@@ -3227,6 +3227,36 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_svlock_set_initialized(PyObject *self, PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  int arg2 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  PyObject *swig_obj[2] ;
+  int result;
+  
+  if (!SWIG_Python_UnpackTuple(args, "svlock_set_initialized", 2, 2, swig_obj)) SWIG_fail;
+  ecode1 = SWIG_AsVal_int(swig_obj[0], &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "svlock_set_initialized" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = (int)(val1);
+  ecode2 = SWIG_AsVal_int(swig_obj[1], &val2);
+  if (!SWIG_IsOK(ecode2)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "svlock_set_initialized" "', argument " "2"" of type '" "int""'");
+  } 
+  arg2 = (int)(val2);
+  result = (int)svlock_set_initialized(arg1,arg2);
+  resultobj = SWIG_From_int((int)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_svlock_shm_open(PyObject *self, PyObject *args) {
   PyObject *resultobj = 0;
   int result;
@@ -3476,6 +3506,7 @@ fail:
 static PyMethodDef SwigMethods[] = {
 	 { "svlock_is_initialized", _wrap_svlock_is_initialized, METH_O, NULL},
 	 { "svlock_get_initialized", _wrap_svlock_get_initialized, METH_O, NULL},
+	 { "svlock_set_initialized", _wrap_svlock_set_initialized, METH_VARARGS, NULL},
 	 { "svlock_shm_open", _wrap_svlock_shm_open, METH_NOARGS, NULL},
 	 { "svlock_init_index", _wrap_svlock_init_index, METH_VARARGS, NULL},
 	 { "svlock_init", _wrap_svlock_init, METH_O, NULL},

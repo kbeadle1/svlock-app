@@ -65,6 +65,9 @@ def svlock_is_initialized(index):
 def svlock_get_initialized(index):
     return _svlock.svlock_get_initialized(index)
 
+def svlock_set_initialized(index, value):
+    return _svlock.svlock_set_initialized(index, value)
+
 def svlock_shm_open():
     return _svlock.svlock_shm_open()
 

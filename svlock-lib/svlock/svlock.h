@@ -20,6 +20,7 @@ extern "C" {
 
 int svlock_is_initialized(int index);
 int svlock_get_initialized(int index);
+int svlock_set_initialized(int index, int value);
 int svlock_shm_open(void);
 int svlock_init_index(int index, int value);
 int svlock_init(int count);
