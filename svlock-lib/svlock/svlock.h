@@ -8,7 +8,7 @@
 #ifndef _SVLOCK_H_
 #define _SVLOCK_H_
 
-#define SVLOCK_GLOBAL_SEMAPHORE_NAME "/svos_global_semaphore"
+#define SVLOCK_GLOBAL_SEMAPHORE_NAME "/svlock_global_semaphore"
 #define SVLOCK_GLOBAL_INDEX 0
 #define SVLOCK_MAX_SEMAPHORES 1024
 #define SVLOCK_MAX_HOLD_TIME 30 
