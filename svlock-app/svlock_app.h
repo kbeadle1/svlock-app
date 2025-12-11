@@ -15,14 +15,14 @@
 #include <linux/kdev_t.h>
 #include <sys/stat.h>
 
-// #ifdef CONFIG_SVOS
+//#ifdef CONFIG_SVOS
 //#include <sv/svlib.h>
 //#include <sv/sv.h>
-#include <sv/svlock.h>
-// #endif
+//#include <sv/svlock.h>
+//#endif
 
-#define SVLOCK_PROC_DEVICES_PATH    "/proc/devices"
-#define SVLOCK_DEVICE_PATH          "/dev/"SVLOCK_DEVICE_NAME
+//#define SVLOCK_PROC_DEVICES_PATH    "/proc/devices"
+//#define SVLOCK_DEVICE_PATH          "/dev/"SVLOCK_DEVICE_NAME
 
 const char *usage =
         "Usage: %s\n"

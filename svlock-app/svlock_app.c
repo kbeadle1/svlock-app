@@ -15,6 +15,8 @@
 #include <time.h>
 #include <fcntl.h>
 #include <sys/mman.h>
+#include <errno.h>
+#include <inttypes.h>
 #include "svlock_app.h"
 
 // #ifdef CONFIG_SVOS
@@ -31,16 +33,38 @@ typedef struct svlock_t
 {
     sem_t semaphore[SVLOCK_MAX_SEMAPHORES];
     int initialized[SVLOCK_MAX_SEMAPHORES];
+    time_t initialized_time[SVLOCK_MAX_SEMAPHORES];
+    int (* is_initialized)(int index);
     int count;
 } svlock_t;
 
 sem_t semaphore; // Declare a semaphore variable
 sem_t *named_semaphore;
 svlock_t *shm_svlock;
-SvlockData svlock;
+//SvlockData svlock;
 int *g_file_desc;
 
+int is_initialized(int index)
+{
+    if (!shm_svlock->initialized[index] || !shm_svlock->initialized_time[index])
+    {
+        return 0;
+    }
+    else
+    {
+	time_t elapsed_time = difftime(time(NULL), shm_svlock->initialized_time[index]);
+        if (elapsed_time >= 30)
+	{
+	    shm_svlock->initialized[index] = 0;
+            return 0;
+	}
+	return 1;
+    }
+    return 0;
+}
 
+#if 0
+//#ifdef CONFIG_SVOS
 // driver load/unload
 static int
 svlockUnloadSvlockDriver(void)
@@ -212,6 +236,7 @@ void testLock(int file_desc, int nlocks, int tag, int pid, int tid)
         exit(-1);
     }
 }
+#endif
 
 void *pthread_function(void *arg) {
 	printf("Thread: Waiting to acquire semaphore...\n");
@@ -275,6 +300,7 @@ void testPthread2() {
 	sem_destroy(&semaphore);
 }
 
+#if 0
 void *thread_function(void *arg) {
 	printf("Thread: Waiting to acquire semaphore...\n");
 	SvlockData svlock_param;
@@ -472,6 +498,7 @@ void testThread4(int file_desc, int nlocks, int tag, int pid, int tid) {
 	//sem_destroy(&semaphore);
     	//ioctl(*g_file_desc, SVLOCK_IOCTL_DEINIT, &svlock_param);
 }
+#endif
 
 // named semaphore
 void *thread_function5(void *arg) {
@@ -537,17 +564,81 @@ void testThread6(int file_desc, int nlocks, int tag, int pid, int tid) {
 	ftruncate(fd, sizeof(svlock_t));
 
 	shm_svlock = mmap(NULL, sizeof(svlock_t), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+	shm_svlock->is_initialized = is_initialized;
 
 	// Initialize semaphore with MAX_RESOURCES available at start
-	if (!shm_svlock->initialized[0]) {
+	if (!shm_svlock->is_initialized(0)) {
 	    sem_init(&shm_svlock->semaphore[0], 1, MAX_RESOURCES);
 	    shm_svlock->initialized[0] = 1;
+	    shm_svlock->initialized_time[0] = time(NULL);
 	}
 
 	// Create threads
 	for (int i = 0; i < NUM_THREADS; i++) {
 		thread_args[i] = i;
 		pthread_create(&threads[i], NULL, thread_function6, &thread_args[i]);
+	}
+
+	// Join threads
+	for (int i = 0; i < NUM_THREADS; i++) {
+		pthread_join(threads[i], NULL);
+	}
+
+	// Destroy semaphore
+	sem_close(&shm_svlock->semaphore[0]);
+	shm_unlink(path_name);
+}
+
+// shm semaphore timed wait
+void *thread_function7(void *arg) {
+	int thread_num = *((int*)arg);
+	pid_t pid = getpid();
+	
+	struct timespec ts;
+	clock_gettime(CLOCK_REALTIME, &ts);
+	ts.tv_sec += 30;
+	int s = sem_timedwait(&shm_svlock->semaphore[0], &ts);
+        if (s == -1)
+        { 
+            if (errno == ETIMEDOUT)
+	    {
+	        printf("PID %d Thread %d: sem_timedwait() timed out.\n", pid, thread_num);
+		return NULL;
+	    }
+	}
+	//printf("Thread %d: Entering critical section.\n", thread_num);
+	printf("PID %d Thread %d: Entering critical section.\n", pid, thread_num);
+	sleep(THREAD_WORKTIME);
+	//printf("Thread %d: Leaving critical section.\n", thread_num);
+	printf("PID %d Thread %d: Leaving critical section.\n", pid, thread_num);
+	sem_post(&shm_svlock->semaphore[0]);
+	return NULL;
+}
+
+void testThread7(int file_desc, int nlocks, int tag, int pid, int tid) {
+	pthread_t threads[NUM_THREADS];
+	int thread_args[NUM_THREADS];
+	char *path_name = "/svos_global_semaphore";
+	int fd;
+
+	fd = shm_open(path_name, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR);
+
+	ftruncate(fd, sizeof(svlock_t));
+
+	shm_svlock = mmap(NULL, sizeof(svlock_t), PROT_READ | PROT_WRITE, MAP_SHARED, fd, 0);
+	shm_svlock->is_initialized = is_initialized;
+
+	// Initialize semaphore with MAX_RESOURCES available at start
+	if (!shm_svlock->is_initialized(0)) {
+	    sem_init(&shm_svlock->semaphore[0], 1, MAX_RESOURCES);
+	    shm_svlock->initialized[0] = 1;
+	    shm_svlock->initialized_time[0] = time(NULL);
+	}
+
+	// Create threads
+	for (int i = 0; i < NUM_THREADS; i++) {
+		thread_args[i] = i;
+		pthread_create(&threads[i], NULL, thread_function7, &thread_args[i]);
 	}
 
 	// Join threads
@@ -614,7 +705,6 @@ void ioctlAllocateMemoryTargets()
 // #endif
 
 }
-#endif
 
 
 static int
@@ -745,6 +835,7 @@ svlockCheckAndLoadDriver(void)
     }
     return result_code;
 }
+#endif
 
 
 
@@ -921,21 +1012,26 @@ main(int argc, char **argv)
     processArgs(argc, argv);
 
 
+#if 0
     if (!named_cmd && !shm_cmd && !posix_cmd) {
         return_code = svlockCheckAndLoadDriver();
     }
+#endif
 
     time_t start_time, end_time;
     double elapsed_seconds;
 
     if (unload_driver) {
+#if 0
         return svlockUnloadSvlockDriver();
+#endif
     }
     if (alloc_cmd) {
         printf("Starting allocation \n");
         //ioctlAllocateMemoryTargets();
     }
     if (switch_cmd) {
+#if 0
         file_desc = open(SVLOCK_DEVICE_PATH, 0);
 
         if (file_desc < 0) {
@@ -944,8 +1040,10 @@ main(int argc, char **argv)
         }
         //ioctlStartQuiesce(file_desc);
         close(file_desc);
+#endif
     }
     if (halt_cmd) {
+#if 0
         file_desc = open(SVLOCK_DEVICE_PATH, 0);
         if (file_desc < 0) {
             printf("Can't open device file: %s\n", SVLOCK_DEVICE_PATH);
@@ -953,8 +1051,10 @@ main(int argc, char **argv)
         }
         //ioctlHalt(file_desc, halt_return_code);
         close(file_desc);
+#endif
     }
     if (init_cmd) {
+#if 0
         file_desc = open(SVLOCK_DEVICE_PATH, 0);
 
         if (file_desc < 0) {
@@ -963,8 +1063,10 @@ main(int argc, char **argv)
         }
         ioctlInit(file_desc, nlocks, tag, pid, tid);
         close(file_desc);
+#endif
     }
     if (acquire_cmd) {
+#if 0
         file_desc = open(SVLOCK_DEVICE_PATH, 0);
 
         if (file_desc < 0) {
@@ -973,8 +1075,10 @@ main(int argc, char **argv)
         }
         ioctlAcquire(file_desc, nlocks, tag, pid, tid);
         close(file_desc);
+#endif
     }
     if (release_cmd) {
+#if 0
         file_desc = open(SVLOCK_DEVICE_PATH, 0);
 
         if (file_desc < 0) {
@@ -983,8 +1087,10 @@ main(int argc, char **argv)
         }
         ioctlRelease(file_desc, nlocks, tag, pid, tid);
         close(file_desc);
+#endif
     }
     if (releaseall_cmd) {
+#if 0
         file_desc = open(SVLOCK_DEVICE_PATH, 0);
 
         if (file_desc < 0) {
@@ -993,8 +1099,10 @@ main(int argc, char **argv)
         }
         ioctlReleaseAll(file_desc, nlocks, tag, pid, tid);
         close(file_desc);
+#endif
     }
     if (deinit_cmd) {
+#if 0
         file_desc = open(SVLOCK_DEVICE_PATH, 0);
 
         if (file_desc < 0) {
@@ -1003,8 +1111,10 @@ main(int argc, char **argv)
         }
         ioctlDeinit(file_desc, nlocks, tag, pid, tid);
         close(file_desc);
+#endif
     }
     if (deinitall_cmd) {
+#if 0
         file_desc = open(SVLOCK_DEVICE_PATH, 0);
 
         if (file_desc < 0) {
@@ -1013,8 +1123,10 @@ main(int argc, char **argv)
         }
         ioctlDeinitAll(file_desc, nlocks, tag, pid, tid);
         close(file_desc);
+#endif
     }
     if (list_cmd) {
+#if 0
         file_desc = open(SVLOCK_DEVICE_PATH, 0);
 
         if (file_desc < 0) {
@@ -1023,8 +1135,10 @@ main(int argc, char **argv)
         }
         ioctlList(file_desc, nlocks, tag, pid, tid);
         close(file_desc);
+#endif
     }
     if (test_cmd) {
+#if 0
         file_desc = open(SVLOCK_DEVICE_PATH, 0);
 
         if (file_desc < 0) {
@@ -1041,6 +1155,7 @@ main(int argc, char **argv)
         elapsed_seconds = difftime(end_time, start_time);
         printf("Elapsed time: %.2f seconds\n", elapsed_seconds);
 	close(file_desc);
+#endif
     }
     if (posix_cmd) {
     	start_time = time(NULL);
@@ -1060,7 +1175,7 @@ main(int argc, char **argv)
     }
     if (shm_cmd) {
     	start_time = time(NULL);
-        testThread6(file_desc, nlocks, tag, pid, tid);
+        testThread7(file_desc, nlocks, tag, pid, tid);
         end_time = time(NULL);
         elapsed_seconds = difftime(end_time, start_time);
         printf("Elapsed time: %.2f seconds\n", elapsed_seconds);
