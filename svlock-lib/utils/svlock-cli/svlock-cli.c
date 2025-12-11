@@ -6,7 +6,84 @@
 #include "svlock/svlock.h"
 #include "args.h"
 
+#define ARRAY_SIZE(x)   (sizeof(x) / sizeof((x)[0]))
+
+static bool display_semaphore_value(void);
+static bool display_acquire_semaphore(void);
+static bool display_release_semaphore(void);
+
+struct output_selection {
+    bool (*want_selection)(void);
+    bool (*generated_successfully)(void);
+};
+
+struct output_selection output_selections[] = {
+    { want_display_semaphore_value,     display_semaphore_value },
+    { want_display_acquire_semaphore,     display_acquire_semaphore },
+    { want_display_release_semaphore,     display_release_semaphore },
+};
+
 int main(int argc, char *argv[])
 {
-    return 0;
+    unsigned int i;
+    struct output_selection *selection;
+    bool had_error = false;
+  
+    process_args(argc, argv);
+
+    for (i = 0; i < ARRAY_SIZE(output_selections); i++) {
+        selection = &output_selections[i];
+        if (selection->want_selection()) {
+            if (!selection->generated_successfully()) {
+                had_error = true;
+            }
+        }
+    }
+
+    if (had_error) {
+        return EXIT_FAILURE;
+    } else {
+        return EXIT_SUCCESS;
+    }
+}
+
+static bool display_semaphore_value(void)
+{
+    int semaphore_index = 0;
+    int semaphore_value = 0;
+
+    semaphore_index = get_semaphore_index();
+    semaphore_value = svlock_getvalue(semaphore_index);
+
+    printf("semaphore[%d] value = %d\n", semaphore_index, semaphore_value);
+
+    return true;
+}
+
+static bool display_acquire_semaphore(void)
+{
+    int semaphore_index = 0;
+    int semaphore_value = 0;
+
+    semaphore_index = get_semaphore_index();
+    svlock_acquire(semaphore_index);
+    semaphore_value = svlock_getvalue(semaphore_index);
+
+    printf("semaphore[%d] value = %d\n", semaphore_index, semaphore_value);
+
+    return true;
+}
+
+static bool display_release_semaphore(void)
+{
+    int semaphore_index = 0;
+    int semaphore_value = 0;
+
+    semaphore_index = get_semaphore_index();
+    svlock_release(semaphore_index);
+    semaphore_value = svlock_getvalue(semaphore_index);
+
+    printf("semaphore[%d] value = %d\n", semaphore_index, semaphore_value);
+
+    return true;
 }

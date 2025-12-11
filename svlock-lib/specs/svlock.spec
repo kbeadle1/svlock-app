@@ -8,10 +8,7 @@ Vendor:    Intel Corp
 Packager: Kevin Beadle <kevin.beadle@intel.com>
 Source:    %{name}-%{version}.tar.gz
 Requires:  libxml2
-BuildRequires: libxml2-devel, autoconf, automake, libtool, kernel-devel, kernel-headers, python3-devel
-%if 0%{?suse_version}
-BuildRequires: kernel-default-devel
-%endif
+BuildRequires: libxml2-devel, autoconf, automake, libtool, python3-devel
 
 %package   utils
 Provides:  svlock-utils
@@ -91,26 +88,20 @@ rm -fr $RPM_BUILD_ROOT
 
 %files utils
 %defattr(-,root,root)
-%{_bindir}/svlock-query
-%{_bindir}/svlock-cpuid
-%{_bindir}/svlock-trigger
-%{_bindir}/svlock-register-target-blocks
-%{_bindir}/svlock-supports-atomics
-%{_bindir}/svlock-reg
+%{_bindir}/svlock-cli
 
 
 %files devel
 %defattr(-,root,root)
 %{_bindir}/svlock-config
 %{_prefix}/include/svlock/*.h
-%{_prefix}/include/svlock/*/*.h
 %{_libdir}/libsvlock*.*a
 %{_libdir}/libsvlock*.so
 %{_libdir}/pkgconfig/*.pc
 
 %files unit-tests
 %defattr(-,root,root)
-%{_bindir}/osv-ut/*
+%{_bindir}/svlock-ut/*
 
 %files -n python3-%{name}
 %defattr(-,root,root)

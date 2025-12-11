@@ -10,13 +10,13 @@
 <headers>
     /* The list of paths to header files and/or
        directories with header files, one per line */
-libosv/osvapi.h
+svlock/svlock.h
 </headers>
 
 <libs>
     /* The list of paths to shared libraries (*.so) and/or
        directories with shared libraries, one per line */
-debian/tmp/usr/lib/libosv.so
+debian/tmp/usr/lib/libsvlock.so
 </libs>
 
 /* Optional sections */
