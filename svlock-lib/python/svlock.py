@@ -101,8 +101,8 @@ def svlock_release_all_index(index):
 def svlock_close_all():
     return _svlock.svlock_close_all()
 
-def svlock_clean_all():
-    return _svlock.svlock_clean_all()
+def svlock_cleanup():
+    return _svlock.svlock_cleanup()
 
 def svlock_shm_close():
     return _svlock.svlock_shm_close()

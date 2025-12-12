@@ -3477,12 +3477,12 @@ fail:
 }
 
 
-SWIGINTERN PyObject *_wrap_svlock_clean_all(PyObject *self, PyObject *args) {
+SWIGINTERN PyObject *_wrap_svlock_cleanup(PyObject *self, PyObject *args) {
   PyObject *resultobj = 0;
   int result;
   
-  if (!SWIG_Python_UnpackTuple(args, "svlock_clean_all", 0, 0, 0)) SWIG_fail;
-  result = (int)svlock_clean_all();
+  if (!SWIG_Python_UnpackTuple(args, "svlock_cleanup", 0, 0, 0)) SWIG_fail;
+  result = (int)svlock_cleanup();
   resultobj = SWIG_From_int((int)(result));
   return resultobj;
 fail:
@@ -3518,7 +3518,7 @@ static PyMethodDef SwigMethods[] = {
 	 { "svlock_release_all", _wrap_svlock_release_all, METH_NOARGS, NULL},
 	 { "svlock_release_all_index", _wrap_svlock_release_all_index, METH_O, NULL},
 	 { "svlock_close_all", _wrap_svlock_close_all, METH_NOARGS, NULL},
-	 { "svlock_clean_all", _wrap_svlock_clean_all, METH_NOARGS, NULL},
+	 { "svlock_cleanup", _wrap_svlock_cleanup, METH_NOARGS, NULL},
 	 { "svlock_shm_close", _wrap_svlock_shm_close, METH_NOARGS, NULL},
 	 { NULL, NULL, 0, NULL }
 };
