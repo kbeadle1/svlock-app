@@ -71,32 +71,6 @@ AC_SUBST(libxml2_LIBS)
 AC_SUBST(libxml2_CFLAGS)
 
 
-dnl
-dnl Find some kernel headers. We only use the ACPI headers, so the kernel
-dnl version does not really matter
-dnl
-if test -z "${COND_LINUX_TRUE}"
-then
-	AC_MSG_CHECKING(for Linux kernel ACPI headers) 
-	linux_kernel_src_dir=""
-
-	for d in /usr/src/kernels/* /usr/src/linux-headers* /usr/src/linux
-	do
-		if test -f $d/include/acpi/platform/aclinux.h
-		then
-			linux_kernel_src_dir=$d
-		fi
-	done
-	if test -n "$linux_kernel_src_dir"
-	then
-		echo "Did not find kernel source"
-		AC_DEFINE(HAVE_ACPI_H, 1, [Define if ACPI headers are available])
-	fi
-fi
-
-
-AC_SUBST(LINKERNDIR,$linux_kernel_src_dir)
-
 dnl ===============
 dnl Checks for SWIG
 dnl ===============
