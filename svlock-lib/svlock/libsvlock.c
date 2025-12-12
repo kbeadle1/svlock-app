@@ -39,9 +39,10 @@ int svlock_is_initialized(int index)
 
     if (!__svlock)
     {
-	ret = svlock_shm_open();
-        if (ret == -1)
+        ret = svlock_shm_open();
+        if (ret == -1) {
             return -1;
+        }
     }
     if (
          !__svlock->initialized[index] ||
@@ -70,9 +71,10 @@ int svlock_get_initialized(int index)
 
     if (!__svlock)
     {
-	ret = svlock_shm_open();
-        if (ret == -1)
+        ret = svlock_shm_open();
+        if (ret == -1) {
             return -1;
+        }
     }
     return __svlock->initialized[index];
 }
@@ -83,9 +85,10 @@ int svlock_set_initialized(int index, int value)
 
     if (!__svlock)
     {
-	ret = svlock_shm_open();
-        if (ret == -1)
+        ret = svlock_shm_open();
+        if (ret == -1) {
             return -1;
+        }
     }
     __svlock->initialized[index] = 1 ? value > 0 : 0;
     return __svlock->initialized[index];
@@ -96,16 +99,19 @@ int svlock_shm_open(void)
     int ret = 0;
 
     __svlock_fd = shm_open(SVLOCK_GLOBAL_SEMAPHORE_NAME, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR);
-    if (__svlock_fd == -1)
+    if (__svlock_fd == -1) {
         return -1;
+    }
 
     ret = ftruncate(__svlock_fd, sizeof(svlock_t));
-    if (ret == -1)
+    if (ret == -1) {
         return -1;
+    }
 
     __svlock = mmap(NULL, sizeof(svlock_t), PROT_READ | PROT_WRITE, MAP_SHARED, __svlock_fd, 0);
-    if (__svlock == MAP_FAILED)
+    if (__svlock == MAP_FAILED) {
         return -1;
+    }
 
     return 0;
 }
@@ -114,17 +120,20 @@ int svlock_init_index(int index, int value)
 {
     int ret = 0;
 
-    if (index >= SVLOCK_MAX_SEMAPHORES)
+    if (index >= SVLOCK_MAX_SEMAPHORES) {
         return -1;
+    }
 
-    if (value <= 0)
+    if (value <= 0) {
         return -1;
+    }
 
     if (!__svlock)
     {
-	ret = svlock_shm_open();
-        if (ret == -1)
+        ret = svlock_shm_open();
+        if (ret == -1) {
             return -1;
+        }
     }
 
     //if (!svlock_is_initialized(index))
@@ -132,17 +141,18 @@ int svlock_init_index(int index, int value)
     {
         // Initialize semaphores as process-shared with value
         ret = sem_init(&__svlock->semaphore[index], 1, value);
-	__svlock->value[index] = value;
-	__svlock->initialized_time[index] = time(NULL);
-	__svlock->initialized[index] = 1;
-        if (ret == -1)
+        __svlock->value[index] = value;
+        __svlock->initialized_time[index] = time(NULL);
+        __svlock->initialized[index] = 1;
+        if (ret == -1) {
             return -1;
+        }
         __svlock->count++;
     }
     else
     {
         // Semaphore slot already initialized
-	return -1; 
+        return 0; 
     }
 
     return 0; 
@@ -153,14 +163,16 @@ int svlock_init(int count)
     int ret = 0;
     int index = 0;
 
-    if (count <= 0)
+    if (count <= 0) {
        return -1;
+    }
 
     if (!__svlock)
     {
-	ret = svlock_shm_open();
-        if (ret == -1)
+        ret = svlock_shm_open();
+        if (ret == -1) {
             return -1;
+        }
     }
 
     // Get next open semaphore slot
@@ -168,10 +180,10 @@ int svlock_init(int count)
     {
         //if (!svlock_is_initialized(index))
         if (!__svlock->initialized[index])
-	{
+        {
             index = i;
             break;
-	}
+        }
     }
 
     svlock_init_index(index, count);
@@ -183,22 +195,25 @@ int svlock_acquire(int index)
 {
     int ret = 0;
 
-    if (index >= SVLOCK_MAX_SEMAPHORES)
+    if (index >= SVLOCK_MAX_SEMAPHORES) {
         return -1;
+    }
 
     if (!__svlock)
     {
-	ret = svlock_shm_open();
-        if (ret == -1)
+        ret = svlock_shm_open();
+        if (ret == -1) {
             return -1;
+        }
     }
 
     if (!__svlock->initialized[index])
     {
-        if (!__svlock->value[index])
+        if (!__svlock->value[index]) {
             svlock_init_index(index, 1);
-        else
+        } else {
             svlock_init_index(index, __svlock->value[index]);
+        }
     }
 
     ret = sem_wait(&__svlock->semaphore[index]);
@@ -215,7 +230,7 @@ int svlock_acquire(int index)
         {
             return -1;
         }
-    }		    
+    }           
 #endif
 
     return ret;
@@ -225,18 +240,21 @@ int svlock_release(int index)
 {
     int ret = 0;
 
-    if (index >= SVLOCK_MAX_SEMAPHORES)
+    if (index >= SVLOCK_MAX_SEMAPHORES) {
         return -1;
+    }
 
     if (!__svlock)
     {
-	ret = svlock_shm_open();
-        if (ret == -1)
+        ret = svlock_shm_open();
+        if (ret == -1) {
             return -1;
+        }
     }
 
-    if (!__svlock->initialized[index])
+    if (!__svlock->initialized[index]) {
         return -1;
+    }
 
     ret = sem_post(&__svlock->semaphore[index]);
     return ret;
@@ -247,18 +265,21 @@ int svlock_getvalue(int index)
     int ret = 0;
     int value = 0;
 
-    if (index >= SVLOCK_MAX_SEMAPHORES)
+    if (index >= SVLOCK_MAX_SEMAPHORES) {
         return -1;
+    }
 
     if (!__svlock)
     {
-	ret = svlock_shm_open();
-        if (ret == -1)
+        ret = svlock_shm_open();
+        if (ret == -1) {
             return -1;
+        }
     }
 
-    if (!__svlock->initialized[index])
+    if (!__svlock->initialized[index]) {
         return -1;
+    }
 
     ret = sem_getvalue(&__svlock->semaphore[index], &value);
     return value;
@@ -268,26 +289,30 @@ int svlock_close(int index)
 {
     int ret = 0;
 
-    if (index >= SVLOCK_MAX_SEMAPHORES)
+    if (index >= SVLOCK_MAX_SEMAPHORES) {
         return -1;
+    }
 
     if (!__svlock)
     {
-	ret = svlock_shm_open();
-        if (ret == -1)
+        ret = svlock_shm_open();
+        if (ret == -1) {
             return -1;
+        }
     }
 
-    if (!__svlock->initialized[index])
+    if (!__svlock->initialized[index]) {
         return -1;
+    }
 
     ret = sem_close(&__svlock->semaphore[index]);
     
     __svlock->initialized[index] = 0;
     __svlock->value[index] = 0;
 
-    if (__svlock->count >= 1)
+    if (__svlock->count >= 1) {
         __svlock->count--;
+    }
 
     return ret;
 }
@@ -304,19 +329,20 @@ int svlock_release_all(void)
 {
     int value = 0;
 
-    if (!__svlock)
-	svlock_shm_open();
+    if (!__svlock) {
+        svlock_shm_open();
+    }
 
     for (int i = 0; i < SVLOCK_MAX_SEMAPHORES; i++)
     {  
-	value = svlock_getvalue(i);
-	while (value == 0)
-	{
+        value = svlock_getvalue(i);
+        while (value == 0)
+        {
             svlock_release(i);
-	    // Give time for semaphore to refresh value
+            // Give some time for semaphore to refresh value
             usleep(100000);
-	    value = svlock_getvalue(i);
-	}
+            value = svlock_getvalue(i);
+        }
     }
 
     return 0;
@@ -326,10 +352,12 @@ int svlock_release_all_index(int index)
 {
     int value = 0;
 
-    if (!__svlock)
-	svlock_shm_open();
+    if (!__svlock) {
+        svlock_shm_open();
+    }
 
     value = svlock_getvalue(index);
+
     while (value == 0)
     {
         svlock_release(index);
@@ -347,29 +375,32 @@ int svlock_close_all(void)
 
     if (!__svlock)
     {
-	ret = svlock_shm_open();
-        if (ret == -1)
+        ret = svlock_shm_open();
+        if (ret == -1) {
             return -1;
+        }
     }
 
 
-    for (int i = 0; i < SVLOCK_MAX_SEMAPHORES; i++)
+    for (int i = 0; i < SVLOCK_MAX_SEMAPHORES; i++) {
         svlock_close(i);
+    }
 
     __svlock->count = 0;
 
     return 0;
 }
 
-int svlock_clean_all(void)
+int svlock_cleanup(void)
 {
     int ret = 0;
 
     if (!__svlock)
     {
-	ret = svlock_shm_open();
-        if (ret == -1)
+        ret = svlock_shm_open();
+        if (ret == -1) {
             return -1;
+        }
     }
 
     svlock_release_all();
@@ -385,18 +416,21 @@ int svlock_shm_close(void)
 
     if (!__svlock)
     {
-	ret = svlock_shm_open();
-        if (ret == -1)
+        ret = svlock_shm_open();
+        if (ret == -1) {
             return -1;
+        }
     }
 
     ret = munmap(__svlock, sizeof(svlock_t)); 
-    if (ret == -1) 
+    if (ret == -1) {
         return -1;
+    }
 
     ret = close(__svlock_fd);
-    if (ret == -1) 
+    if (ret == -1) {
         return -1;
+    }
 
     return ret;
 }

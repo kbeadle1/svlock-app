@@ -32,7 +32,7 @@ int svlock_unlink(void);
 int svlock_release_all(void);
 int svlock_release_all_index(int index);
 int svlock_close_all(void);
-int svlock_clean_all(void);
+int svlock_cleanup(void);
 int svlock_shm_close(void);
 
 #ifdef __cplusplus
