@@ -27,7 +27,7 @@ typedef struct svlock_t
     int value[SVLOCK_MAX_SEMAPHORES];
     int initialized[SVLOCK_MAX_SEMAPHORES];
     time_t initialized_time[SVLOCK_MAX_SEMAPHORES];
-    int count;
+    int count[SVLOCK_MAX_SEMAPHORES];
 } svlock_t;
 
 int __svlock_fd;
@@ -63,6 +63,34 @@ int svlock_is_initialized(int index)
         return 1;
     }
     return 0;
+}
+
+int svlock_get_value(int index)
+{
+    int ret = 0;
+
+    if (!__svlock)
+    {
+        ret = svlock_shm_open();
+        if (ret == -1) {
+            return -1;
+        }
+    }
+    return __svlock->value[index];
+}
+
+int svlock_get_count(int index)
+{
+    int ret = 0;
+
+    if (!__svlock)
+    {
+        ret = svlock_shm_open();
+        if (ret == -1) {
+            return -1;
+        }
+    }
+    return __svlock->count[index];
 }
 
 int svlock_get_initialized(int index)
@@ -144,10 +172,10 @@ int svlock_init_index(int index, int value)
         __svlock->value[index] = value;
         __svlock->initialized_time[index] = time(NULL);
         __svlock->initialized[index] = 1;
+        __svlock->count[index] = 0;
         if (ret == -1) {
             return -1;
         }
-        __svlock->count++;
     }
     else
     {
@@ -158,12 +186,12 @@ int svlock_init_index(int index, int value)
     return 0; 
 }
 
-int svlock_init(int count)
+int svlock_init(int value)
 {
     int ret = 0;
     int index = 0;
 
-    if (count <= 0) {
+    if (value <= 0) {
        return -1;
     }
 
@@ -186,7 +214,7 @@ int svlock_init(int count)
         }
     }
 
-    svlock_init_index(index, count);
+    svlock_init_index(index, value);
 
     return index;
 }
@@ -214,6 +242,12 @@ int svlock_acquire(int index)
         } else {
             svlock_init_index(index, __svlock->value[index]);
         }
+    }
+
+    __svlock->count[index]++;
+
+    if (__svlock->value[index] > 0) {
+        __svlock->value[index]--;
     }
 
     ret = sem_wait(&__svlock->semaphore[index]);
@@ -257,6 +291,13 @@ int svlock_release(int index)
     }
 
     ret = sem_post(&__svlock->semaphore[index]);
+
+    __svlock->value[index]++;
+
+    if (__svlock->count[index] > 0) {
+        __svlock->count[index]--;
+    }
+
     return ret;
 }
 
@@ -282,6 +323,8 @@ int svlock_getvalue(int index)
     }
 
     ret = sem_getvalue(&__svlock->semaphore[index], &value);
+
+    __svlock->value[index] = value;
     return value;
 }
 
@@ -309,10 +352,7 @@ int svlock_close(int index)
     
     __svlock->initialized[index] = 0;
     __svlock->value[index] = 0;
-
-    if (__svlock->count >= 1) {
-        __svlock->count--;
-    }
+    __svlock->count[index] = 0;
 
     return ret;
 }
@@ -385,8 +425,6 @@ int svlock_close_all(void)
     for (int i = 0; i < SVLOCK_MAX_SEMAPHORES; i++) {
         svlock_close(i);
     }
-
-    __svlock->count = 0;
 
     return 0;
 }

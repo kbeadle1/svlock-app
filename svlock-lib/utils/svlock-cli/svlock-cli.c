@@ -9,8 +9,10 @@
 #define ARRAY_SIZE(x)   (sizeof(x) / sizeof((x)[0]))
 
 static bool display_semaphore_value(void);
+static bool display_semaphore_count(void);
 static bool display_acquire_semaphore(void);
 static bool display_release_semaphore(void);
+static bool display_release_all_semaphore(void);
 
 struct output_selection {
     bool (*want_selection)(void);
@@ -19,8 +21,10 @@ struct output_selection {
 
 struct output_selection output_selections[] = {
     { want_display_semaphore_value,     display_semaphore_value },
+    { want_display_semaphore_count,     display_semaphore_count },
     { want_display_acquire_semaphore,     display_acquire_semaphore },
     { want_display_release_semaphore,     display_release_semaphore },
+    { want_display_release_all_semaphore,     display_release_all_semaphore },
 };
 
 int main(int argc, char *argv[])
@@ -60,6 +64,19 @@ static bool display_semaphore_value(void)
     return true;
 }
 
+static bool display_semaphore_count(void)
+{
+    int semaphore_index = 0;
+    int semaphore_count = 0;
+
+    semaphore_index = get_semaphore_index();
+    semaphore_count = svlock_get_count(semaphore_index);
+
+    printf("semaphore[%d] count = %d\n", semaphore_index, semaphore_count);
+
+    return true;
+}
+
 static bool display_acquire_semaphore(void)
 {
     int semaphore_index = 0;
@@ -81,6 +98,20 @@ static bool display_release_semaphore(void)
 
     semaphore_index = get_semaphore_index();
     svlock_release(semaphore_index);
+    semaphore_value = svlock_getvalue(semaphore_index);
+
+    printf("semaphore[%d] value = %d\n", semaphore_index, semaphore_value);
+
+    return true;
+}
+
+static bool display_release_all_semaphore(void)
+{
+    int semaphore_index = 0;
+    int semaphore_value = 0;
+
+    semaphore_index = get_semaphore_index();
+    svlock_release_all();
     semaphore_value = svlock_getvalue(semaphore_index);
 
     printf("semaphore[%d] value = %d\n", semaphore_index, semaphore_value);

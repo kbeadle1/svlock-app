@@ -27,6 +27,8 @@ int svlock_init(int count);
 int svlock_acquire(int index);
 int svlock_release(int index);
 int svlock_getvalue(int index);
+int svlock_get_value(int index);
+int svlock_get_count(int index);
 int svlock_close(int index);
 int svlock_unlink(void);
 int svlock_release_all(void);

@@ -10,15 +10,19 @@
 static void print_usage(const char *progname);
 
 static int  semaphore_index = 0;        /*!< option to --index */
-static bool display_semaphore_value = false;    /*!< --get-value used */
+static bool display_semaphore_value = false;    /*!< --value used */
+static bool display_semaphore_count = false;    /*!< --count used */
 static bool display_acquire_semaphore = false;    /*!< --acquire used */
 static bool display_release_semaphore = false;    /*!< --release used */
-static bool display_verbose = false;        /*!< --verbose used */
+static bool display_release_all_semaphore = false;    /*!< --release-all used */
 
 static struct option opts[] = {
     {"index", required_argument, NULL, 'i'},
-    {"get-value", no_argument, NULL, 'V'},
-    {"verbose", no_argument, NULL, 'v'},
+    {"value", no_argument, NULL, 'v'},
+    {"count", no_argument, NULL, 'c'},
+    {"acquire", no_argument, NULL, 'a'},
+    {"release", no_argument, NULL, 'r'},
+    {"release-all", no_argument, NULL, 'R'},
     {NULL, 0, NULL, 0}
 };
 
@@ -43,8 +47,12 @@ void process_args(int argc, char *argv[])
         case 'i':
             semaphore_index = atoi(optarg);
             break;
-        case 'V':
+        case 'v':
             display_semaphore_value = true;
+            specified_cmd = true;
+            break;
+        case 'c':
+            display_semaphore_count = true;
             specified_cmd = true;
             break;
         case 'a':
@@ -55,8 +63,9 @@ void process_args(int argc, char *argv[])
             display_release_semaphore = true;
             specified_cmd = true;
             break;
-        case 'v':
-            display_verbose = true;
+        case 'R':
+            display_release_all_semaphore = true;
+            specified_cmd = true;
             break;
         default:
             do_usage = true;
@@ -84,6 +93,11 @@ bool want_display_semaphore_value(void)
     return display_semaphore_value;
 }
 
+bool want_display_semaphore_count(void)
+{
+    return display_semaphore_count;
+}
+
 bool want_display_acquire_semaphore(void)
 {
     return display_acquire_semaphore;
@@ -94,15 +108,9 @@ bool want_display_release_semaphore(void)
     return display_release_semaphore;
 }
 
-/**
- *  returns an indication of whether items should
- *  be displayed iwthmore details based on the command line arguments.
- *
- *  @return true if verbose is set, else false
- */
-bool want_display_verbose(void)
+bool want_display_release_all_semaphore(void)
 {
-    return display_verbose;
+    return display_release_all_semaphore;
 }
 
 /**
@@ -124,11 +132,11 @@ static const char *msgs[] = {
     "output formats are designed such that the output can be used\n",
     "as shell script\n",
     "\t-i --index specify semaphore index\n",
-    "\t-V --get-value print current semaphore value\n",
+    "\t-v --value print current semaphore value\n",
+    "\t-c --count print current semaphore count\n",
     "\t-a --acquire acquire semaphore\n",
     "\t-r --release release semaphore value\n",
     "\t-R --release-all release all semaphores\n",
-    "\t-v --verbose cause more details to be displayed\n",
     NULL,
 };
 
@@ -141,7 +149,7 @@ static void print_usage(const char *progname)
 {
     size_t i;
 
-    fprintf(stderr, "Usage:  %s [long-options] [-iVarRv] "
+    fprintf(stderr, "Usage:  %s [long-options] [-ivcarR] "
         "[-i semaphore-index]\n", progname);
     for (i = 0; msgs[i] != NULL; i++)
         fputs(msgs[i], stderr);
