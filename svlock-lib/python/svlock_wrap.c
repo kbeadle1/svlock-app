@@ -3392,6 +3392,52 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_svlock_get_value(PyObject *self, PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  PyObject *swig_obj[1] ;
+  int result;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  ecode1 = SWIG_AsVal_int(swig_obj[0], &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "svlock_get_value" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = (int)(val1);
+  result = (int)svlock_get_value(arg1);
+  resultobj = SWIG_From_int((int)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_svlock_get_count(PyObject *self, PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  PyObject *swig_obj[1] ;
+  int result;
+  
+  if (!args) SWIG_fail;
+  swig_obj[0] = args;
+  ecode1 = SWIG_AsVal_int(swig_obj[0], &val1);
+  if (!SWIG_IsOK(ecode1)) {
+    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "svlock_get_count" "', argument " "1"" of type '" "int""'");
+  } 
+  arg1 = (int)(val1);
+  result = (int)svlock_get_count(arg1);
+  resultobj = SWIG_From_int((int)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_svlock_close(PyObject *self, PyObject *args) {
   PyObject *resultobj = 0;
   int arg1 ;
@@ -3513,6 +3559,8 @@ static PyMethodDef SwigMethods[] = {
 	 { "svlock_acquire", _wrap_svlock_acquire, METH_O, NULL},
 	 { "svlock_release", _wrap_svlock_release, METH_O, NULL},
 	 { "svlock_getvalue", _wrap_svlock_getvalue, METH_O, NULL},
+	 { "svlock_get_value", _wrap_svlock_get_value, METH_O, NULL},
+	 { "svlock_get_count", _wrap_svlock_get_count, METH_O, NULL},
 	 { "svlock_close", _wrap_svlock_close, METH_O, NULL},
 	 { "svlock_unlink", _wrap_svlock_unlink, METH_NOARGS, NULL},
 	 { "svlock_release_all", _wrap_svlock_release_all, METH_NOARGS, NULL},

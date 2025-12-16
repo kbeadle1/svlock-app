@@ -90,6 +90,11 @@ int svlock_get_count(int index)
             return -1;
         }
     }
+
+    if (__svlock->count[index] > 0) {
+        return __svlock->count[index]-1;
+    }
+
     return __svlock->count[index];
 }
 
@@ -237,11 +242,7 @@ int svlock_acquire(int index)
 
     if (!__svlock->initialized[index])
     {
-        if (!__svlock->value[index]) {
-            svlock_init_index(index, 1);
-        } else {
-            svlock_init_index(index, __svlock->value[index]);
-        }
+        svlock_init_index(index, 1);
     }
 
     __svlock->count[index]++;
@@ -325,6 +326,11 @@ int svlock_getvalue(int index)
     ret = sem_getvalue(&__svlock->semaphore[index], &value);
 
     __svlock->value[index] = value;
+
+    if (value > 0) {
+        __svlock->count[index] = 0;
+    }
+
     return value;
 }
 

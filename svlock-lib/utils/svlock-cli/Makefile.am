@@ -10,6 +10,7 @@ AM_CPPFLAGS = 					\
 	-Wall -Werror -std=c99			\
 	-DHIDE_DEPRECATED			\
 	-D_POSIX_C_SOURCE=200112L		\
+	-D_XOPEN_SOURCE=500			\
 	$(NULL)
 
 

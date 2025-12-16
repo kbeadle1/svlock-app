@@ -40,7 +40,7 @@ void process_args(int argc, char *argv[])
     int opt;
     bool do_usage = false;
     bool specified_cmd = false;
-    const char *optstring = "i:Varv";
+    const char *optstring = "i:vcarR";
 
     while (-1 != (opt = getopt_long(argc, argv, optstring, opts, NULL))) {
         switch (opt) {

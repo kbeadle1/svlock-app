@@ -1,8 +1,8 @@
-#include "config.h"
 #include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 #include "svlock/svlock.h"
 #include "args.h"
 
@@ -84,6 +84,7 @@ static bool display_acquire_semaphore(void)
 
     semaphore_index = get_semaphore_index();
     svlock_acquire(semaphore_index);
+    usleep(100000);
     semaphore_value = svlock_getvalue(semaphore_index);
 
     printf("semaphore[%d] value = %d\n", semaphore_index, semaphore_value);
@@ -98,6 +99,7 @@ static bool display_release_semaphore(void)
 
     semaphore_index = get_semaphore_index();
     svlock_release(semaphore_index);
+    usleep(100000);
     semaphore_value = svlock_getvalue(semaphore_index);
 
     printf("semaphore[%d] value = %d\n", semaphore_index, semaphore_value);

@@ -86,6 +86,12 @@ def svlock_release(index):
 def svlock_getvalue(index):
     return _svlock.svlock_getvalue(index)
 
+def svlock_get_value(index):
+    return _svlock.svlock_get_value(index)
+
+def svlock_get_count(index):
+    return _svlock.svlock_get_count(index)
+
 def svlock_close(index):
     return _svlock.svlock_close(index)
 
