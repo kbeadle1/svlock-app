@@ -18,21 +18,21 @@
 extern "C" {
 #endif
 
-int svlock_is_initialized(int index);
-int svlock_get_initialized(int index);
-int svlock_set_initialized(int index, int value);
+int svlock_is_initialized(int index, pid_t pid, pid_t tid, time_t duration);
+int svlock_get_initialized(int index, pid_t pid, pid_t tid, time_t duration);
+int svlock_set_initialized(int index, int value, pid_t pid, pid_t tid, time_t duration);
 int svlock_shm_open(void);
-int svlock_init_index(int index, int value);
-int svlock_init(int count);
-int svlock_acquire(int index);
-int svlock_release(int index);
-int svlock_getvalue(int index);
-int svlock_get_value(int index);
-int svlock_get_count(int index);
-int svlock_close(int index);
+int svlock_init_index(int index, int value, pid_t pid, pid_t tid, time_t duration);
+int svlock_init(int value, pid_t pid, pid_t tid, time_t duration);
+int svlock_acquire(int index, pid_t pid, pid_t tid, time_t duration);
+int svlock_release(int index, pid_t pid, pid_t tid, time_t duration);
+int svlock_getvalue(int index, pid_t pid, pid_t tid, time_t duration);
+int svlock_get_value(int index, pid_t pid, pid_t tid, time_t duration);
+int svlock_get_count(int index, pid_t pid, pid_t tid, time_t duration);
+int svlock_close(int index, pid_t pid, pid_t tid, time_t duration);
 int svlock_unlink(void);
 int svlock_release_all(void);
-int svlock_release_all_index(int index);
+int svlock_release_all_index(int index, pid_t pid, pid_t tid, time_t duration);
 int svlock_close_all(void);
 int svlock_cleanup(void);
 int svlock_shm_close(void);

@@ -2980,15 +2980,16 @@ SWIG_Python_NonDynamicSetAttr(PyObject *obj, PyObject *name, PyObject *value) {
 
 #define SWIGTYPE_p_char swig_types[0]
 #define SWIGTYPE_p_int swig_types[1]
-#define SWIGTYPE_p_long_long swig_types[2]
-#define SWIGTYPE_p_short swig_types[3]
-#define SWIGTYPE_p_signed_char swig_types[4]
-#define SWIGTYPE_p_unsigned_char swig_types[5]
-#define SWIGTYPE_p_unsigned_int swig_types[6]
-#define SWIGTYPE_p_unsigned_long_long swig_types[7]
-#define SWIGTYPE_p_unsigned_short swig_types[8]
-static swig_type_info *swig_types[10];
-static swig_module_info swig_module = {swig_types, 9, 0, 0, 0, 0};
+#define SWIGTYPE_p_long swig_types[2]
+#define SWIGTYPE_p_long_long swig_types[3]
+#define SWIGTYPE_p_short swig_types[4]
+#define SWIGTYPE_p_signed_char swig_types[5]
+#define SWIGTYPE_p_unsigned_char swig_types[6]
+#define SWIGTYPE_p_unsigned_int swig_types[7]
+#define SWIGTYPE_p_unsigned_long_long swig_types[8]
+#define SWIGTYPE_p_unsigned_short swig_types[9]
+static swig_type_info *swig_types[11];
+static swig_module_info swig_module = {swig_types, 10, 0, 0, 0, 0};
 #define SWIG_TypeQuery(name) SWIG_TypeQueryModule(&swig_module, &swig_module, name)
 #define SWIG_MangledTypeQuery(name) SWIG_MangledTypeQueryModule(&swig_module, &swig_module, name)
 
@@ -3183,20 +3184,51 @@ extern "C" {
 #endif
 SWIGINTERN PyObject *_wrap_svlock_is_initialized(PyObject *self, PyObject *args) {
   PyObject *resultobj = 0;
-  int arg1 ;
+  int arg1 = (int) 0 ;
+  pid_t arg2 = (pid_t) 0 ;
+  pid_t arg3 = (pid_t) 0 ;
+  time_t arg4 = (time_t) 0 ;
   int val1 ;
   int ecode1 = 0 ;
-  PyObject *swig_obj[1] ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  long val4 ;
+  int ecode4 = 0 ;
+  PyObject *swig_obj[4] ;
   int result;
   
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  ecode1 = SWIG_AsVal_int(swig_obj[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "svlock_is_initialized" "', argument " "1"" of type '" "int""'");
-  } 
-  arg1 = (int)(val1);
-  result = (int)svlock_is_initialized(arg1);
+  if (!SWIG_Python_UnpackTuple(args, "svlock_is_initialized", 0, 4, swig_obj)) SWIG_fail;
+  if (swig_obj[0]) {
+    ecode1 = SWIG_AsVal_int(swig_obj[0], &val1);
+    if (!SWIG_IsOK(ecode1)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "svlock_is_initialized" "', argument " "1"" of type '" "int""'");
+    } 
+    arg1 = (int)(val1);
+  }
+  if (swig_obj[1]) {
+    ecode2 = SWIG_AsVal_int(swig_obj[1], &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "svlock_is_initialized" "', argument " "2"" of type '" "pid_t""'");
+    } 
+    arg2 = (pid_t)(val2);
+  }
+  if (swig_obj[2]) {
+    ecode3 = SWIG_AsVal_int(swig_obj[2], &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "svlock_is_initialized" "', argument " "3"" of type '" "pid_t""'");
+    } 
+    arg3 = (pid_t)(val3);
+  }
+  if (swig_obj[3]) {
+    ecode4 = SWIG_AsVal_long(swig_obj[3], &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "svlock_is_initialized" "', argument " "4"" of type '" "time_t""'");
+    } 
+    arg4 = (time_t)(val4);
+  }
+  result = (int)svlock_is_initialized(arg1,arg2,arg3,arg4);
   resultobj = SWIG_From_int((int)(result));
   return resultobj;
 fail:
@@ -3206,20 +3238,51 @@ fail:
 
 SWIGINTERN PyObject *_wrap_svlock_get_initialized(PyObject *self, PyObject *args) {
   PyObject *resultobj = 0;
-  int arg1 ;
+  int arg1 = (int) 0 ;
+  pid_t arg2 = (pid_t) 0 ;
+  pid_t arg3 = (pid_t) 0 ;
+  time_t arg4 = (time_t) 0 ;
   int val1 ;
   int ecode1 = 0 ;
-  PyObject *swig_obj[1] ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  long val4 ;
+  int ecode4 = 0 ;
+  PyObject *swig_obj[4] ;
   int result;
   
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  ecode1 = SWIG_AsVal_int(swig_obj[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "svlock_get_initialized" "', argument " "1"" of type '" "int""'");
-  } 
-  arg1 = (int)(val1);
-  result = (int)svlock_get_initialized(arg1);
+  if (!SWIG_Python_UnpackTuple(args, "svlock_get_initialized", 0, 4, swig_obj)) SWIG_fail;
+  if (swig_obj[0]) {
+    ecode1 = SWIG_AsVal_int(swig_obj[0], &val1);
+    if (!SWIG_IsOK(ecode1)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "svlock_get_initialized" "', argument " "1"" of type '" "int""'");
+    } 
+    arg1 = (int)(val1);
+  }
+  if (swig_obj[1]) {
+    ecode2 = SWIG_AsVal_int(swig_obj[1], &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "svlock_get_initialized" "', argument " "2"" of type '" "pid_t""'");
+    } 
+    arg2 = (pid_t)(val2);
+  }
+  if (swig_obj[2]) {
+    ecode3 = SWIG_AsVal_int(swig_obj[2], &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "svlock_get_initialized" "', argument " "3"" of type '" "pid_t""'");
+    } 
+    arg3 = (pid_t)(val3);
+  }
+  if (swig_obj[3]) {
+    ecode4 = SWIG_AsVal_long(swig_obj[3], &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "svlock_get_initialized" "', argument " "4"" of type '" "time_t""'");
+    } 
+    arg4 = (time_t)(val4);
+  }
+  result = (int)svlock_get_initialized(arg1,arg2,arg3,arg4);
   resultobj = SWIG_From_int((int)(result));
   return resultobj;
 fail:
@@ -3229,27 +3292,61 @@ fail:
 
 SWIGINTERN PyObject *_wrap_svlock_set_initialized(PyObject *self, PyObject *args) {
   PyObject *resultobj = 0;
-  int arg1 ;
-  int arg2 ;
+  int arg1 = (int) 0 ;
+  int arg2 = (int) 0 ;
+  pid_t arg3 = (pid_t) 0 ;
+  pid_t arg4 = (pid_t) 0 ;
+  time_t arg5 = (time_t) 0 ;
   int val1 ;
   int ecode1 = 0 ;
   int val2 ;
   int ecode2 = 0 ;
-  PyObject *swig_obj[2] ;
+  int val3 ;
+  int ecode3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  long val5 ;
+  int ecode5 = 0 ;
+  PyObject *swig_obj[5] ;
   int result;
   
-  if (!SWIG_Python_UnpackTuple(args, "svlock_set_initialized", 2, 2, swig_obj)) SWIG_fail;
-  ecode1 = SWIG_AsVal_int(swig_obj[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "svlock_set_initialized" "', argument " "1"" of type '" "int""'");
-  } 
-  arg1 = (int)(val1);
-  ecode2 = SWIG_AsVal_int(swig_obj[1], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "svlock_set_initialized" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = (int)(val2);
-  result = (int)svlock_set_initialized(arg1,arg2);
+  if (!SWIG_Python_UnpackTuple(args, "svlock_set_initialized", 0, 5, swig_obj)) SWIG_fail;
+  if (swig_obj[0]) {
+    ecode1 = SWIG_AsVal_int(swig_obj[0], &val1);
+    if (!SWIG_IsOK(ecode1)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "svlock_set_initialized" "', argument " "1"" of type '" "int""'");
+    } 
+    arg1 = (int)(val1);
+  }
+  if (swig_obj[1]) {
+    ecode2 = SWIG_AsVal_int(swig_obj[1], &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "svlock_set_initialized" "', argument " "2"" of type '" "int""'");
+    } 
+    arg2 = (int)(val2);
+  }
+  if (swig_obj[2]) {
+    ecode3 = SWIG_AsVal_int(swig_obj[2], &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "svlock_set_initialized" "', argument " "3"" of type '" "pid_t""'");
+    } 
+    arg3 = (pid_t)(val3);
+  }
+  if (swig_obj[3]) {
+    ecode4 = SWIG_AsVal_int(swig_obj[3], &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "svlock_set_initialized" "', argument " "4"" of type '" "pid_t""'");
+    } 
+    arg4 = (pid_t)(val4);
+  }
+  if (swig_obj[4]) {
+    ecode5 = SWIG_AsVal_long(swig_obj[4], &val5);
+    if (!SWIG_IsOK(ecode5)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "svlock_set_initialized" "', argument " "5"" of type '" "time_t""'");
+    } 
+    arg5 = (time_t)(val5);
+  }
+  result = (int)svlock_set_initialized(arg1,arg2,arg3,arg4,arg5);
   resultobj = SWIG_From_int((int)(result));
   return resultobj;
 fail:
@@ -3272,27 +3369,61 @@ fail:
 
 SWIGINTERN PyObject *_wrap_svlock_init_index(PyObject *self, PyObject *args) {
   PyObject *resultobj = 0;
-  int arg1 ;
-  int arg2 ;
+  int arg1 = (int) 0 ;
+  int arg2 = (int) 0 ;
+  pid_t arg3 = (pid_t) 0 ;
+  pid_t arg4 = (pid_t) 0 ;
+  time_t arg5 = (time_t) 0 ;
   int val1 ;
   int ecode1 = 0 ;
   int val2 ;
   int ecode2 = 0 ;
-  PyObject *swig_obj[2] ;
+  int val3 ;
+  int ecode3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  long val5 ;
+  int ecode5 = 0 ;
+  PyObject *swig_obj[5] ;
   int result;
   
-  if (!SWIG_Python_UnpackTuple(args, "svlock_init_index", 2, 2, swig_obj)) SWIG_fail;
-  ecode1 = SWIG_AsVal_int(swig_obj[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "svlock_init_index" "', argument " "1"" of type '" "int""'");
-  } 
-  arg1 = (int)(val1);
-  ecode2 = SWIG_AsVal_int(swig_obj[1], &val2);
-  if (!SWIG_IsOK(ecode2)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "svlock_init_index" "', argument " "2"" of type '" "int""'");
-  } 
-  arg2 = (int)(val2);
-  result = (int)svlock_init_index(arg1,arg2);
+  if (!SWIG_Python_UnpackTuple(args, "svlock_init_index", 0, 5, swig_obj)) SWIG_fail;
+  if (swig_obj[0]) {
+    ecode1 = SWIG_AsVal_int(swig_obj[0], &val1);
+    if (!SWIG_IsOK(ecode1)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "svlock_init_index" "', argument " "1"" of type '" "int""'");
+    } 
+    arg1 = (int)(val1);
+  }
+  if (swig_obj[1]) {
+    ecode2 = SWIG_AsVal_int(swig_obj[1], &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "svlock_init_index" "', argument " "2"" of type '" "int""'");
+    } 
+    arg2 = (int)(val2);
+  }
+  if (swig_obj[2]) {
+    ecode3 = SWIG_AsVal_int(swig_obj[2], &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "svlock_init_index" "', argument " "3"" of type '" "pid_t""'");
+    } 
+    arg3 = (pid_t)(val3);
+  }
+  if (swig_obj[3]) {
+    ecode4 = SWIG_AsVal_int(swig_obj[3], &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "svlock_init_index" "', argument " "4"" of type '" "pid_t""'");
+    } 
+    arg4 = (pid_t)(val4);
+  }
+  if (swig_obj[4]) {
+    ecode5 = SWIG_AsVal_long(swig_obj[4], &val5);
+    if (!SWIG_IsOK(ecode5)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "svlock_init_index" "', argument " "5"" of type '" "time_t""'");
+    } 
+    arg5 = (time_t)(val5);
+  }
+  result = (int)svlock_init_index(arg1,arg2,arg3,arg4,arg5);
   resultobj = SWIG_From_int((int)(result));
   return resultobj;
 fail:
@@ -3302,20 +3433,51 @@ fail:
 
 SWIGINTERN PyObject *_wrap_svlock_init(PyObject *self, PyObject *args) {
   PyObject *resultobj = 0;
-  int arg1 ;
+  int arg1 = (int) 0 ;
+  pid_t arg2 = (pid_t) 0 ;
+  pid_t arg3 = (pid_t) 0 ;
+  time_t arg4 = (time_t) 0 ;
   int val1 ;
   int ecode1 = 0 ;
-  PyObject *swig_obj[1] ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  long val4 ;
+  int ecode4 = 0 ;
+  PyObject *swig_obj[4] ;
   int result;
   
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  ecode1 = SWIG_AsVal_int(swig_obj[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "svlock_init" "', argument " "1"" of type '" "int""'");
-  } 
-  arg1 = (int)(val1);
-  result = (int)svlock_init(arg1);
+  if (!SWIG_Python_UnpackTuple(args, "svlock_init", 0, 4, swig_obj)) SWIG_fail;
+  if (swig_obj[0]) {
+    ecode1 = SWIG_AsVal_int(swig_obj[0], &val1);
+    if (!SWIG_IsOK(ecode1)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "svlock_init" "', argument " "1"" of type '" "int""'");
+    } 
+    arg1 = (int)(val1);
+  }
+  if (swig_obj[1]) {
+    ecode2 = SWIG_AsVal_int(swig_obj[1], &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "svlock_init" "', argument " "2"" of type '" "pid_t""'");
+    } 
+    arg2 = (pid_t)(val2);
+  }
+  if (swig_obj[2]) {
+    ecode3 = SWIG_AsVal_int(swig_obj[2], &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "svlock_init" "', argument " "3"" of type '" "pid_t""'");
+    } 
+    arg3 = (pid_t)(val3);
+  }
+  if (swig_obj[3]) {
+    ecode4 = SWIG_AsVal_long(swig_obj[3], &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "svlock_init" "', argument " "4"" of type '" "time_t""'");
+    } 
+    arg4 = (time_t)(val4);
+  }
+  result = (int)svlock_init(arg1,arg2,arg3,arg4);
   resultobj = SWIG_From_int((int)(result));
   return resultobj;
 fail:
@@ -3325,20 +3487,51 @@ fail:
 
 SWIGINTERN PyObject *_wrap_svlock_acquire(PyObject *self, PyObject *args) {
   PyObject *resultobj = 0;
-  int arg1 ;
+  int arg1 = (int) 0 ;
+  pid_t arg2 = (pid_t) 0 ;
+  pid_t arg3 = (pid_t) 0 ;
+  time_t arg4 = (time_t) 0 ;
   int val1 ;
   int ecode1 = 0 ;
-  PyObject *swig_obj[1] ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  long val4 ;
+  int ecode4 = 0 ;
+  PyObject *swig_obj[4] ;
   int result;
   
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  ecode1 = SWIG_AsVal_int(swig_obj[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "svlock_acquire" "', argument " "1"" of type '" "int""'");
-  } 
-  arg1 = (int)(val1);
-  result = (int)svlock_acquire(arg1);
+  if (!SWIG_Python_UnpackTuple(args, "svlock_acquire", 0, 4, swig_obj)) SWIG_fail;
+  if (swig_obj[0]) {
+    ecode1 = SWIG_AsVal_int(swig_obj[0], &val1);
+    if (!SWIG_IsOK(ecode1)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "svlock_acquire" "', argument " "1"" of type '" "int""'");
+    } 
+    arg1 = (int)(val1);
+  }
+  if (swig_obj[1]) {
+    ecode2 = SWIG_AsVal_int(swig_obj[1], &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "svlock_acquire" "', argument " "2"" of type '" "pid_t""'");
+    } 
+    arg2 = (pid_t)(val2);
+  }
+  if (swig_obj[2]) {
+    ecode3 = SWIG_AsVal_int(swig_obj[2], &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "svlock_acquire" "', argument " "3"" of type '" "pid_t""'");
+    } 
+    arg3 = (pid_t)(val3);
+  }
+  if (swig_obj[3]) {
+    ecode4 = SWIG_AsVal_long(swig_obj[3], &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "svlock_acquire" "', argument " "4"" of type '" "time_t""'");
+    } 
+    arg4 = (time_t)(val4);
+  }
+  result = (int)svlock_acquire(arg1,arg2,arg3,arg4);
   resultobj = SWIG_From_int((int)(result));
   return resultobj;
 fail:
@@ -3348,20 +3541,51 @@ fail:
 
 SWIGINTERN PyObject *_wrap_svlock_release(PyObject *self, PyObject *args) {
   PyObject *resultobj = 0;
-  int arg1 ;
+  int arg1 = (int) 0 ;
+  pid_t arg2 = (pid_t) 0 ;
+  pid_t arg3 = (pid_t) 0 ;
+  time_t arg4 = (time_t) 0 ;
   int val1 ;
   int ecode1 = 0 ;
-  PyObject *swig_obj[1] ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  long val4 ;
+  int ecode4 = 0 ;
+  PyObject *swig_obj[4] ;
   int result;
   
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  ecode1 = SWIG_AsVal_int(swig_obj[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "svlock_release" "', argument " "1"" of type '" "int""'");
-  } 
-  arg1 = (int)(val1);
-  result = (int)svlock_release(arg1);
+  if (!SWIG_Python_UnpackTuple(args, "svlock_release", 0, 4, swig_obj)) SWIG_fail;
+  if (swig_obj[0]) {
+    ecode1 = SWIG_AsVal_int(swig_obj[0], &val1);
+    if (!SWIG_IsOK(ecode1)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "svlock_release" "', argument " "1"" of type '" "int""'");
+    } 
+    arg1 = (int)(val1);
+  }
+  if (swig_obj[1]) {
+    ecode2 = SWIG_AsVal_int(swig_obj[1], &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "svlock_release" "', argument " "2"" of type '" "pid_t""'");
+    } 
+    arg2 = (pid_t)(val2);
+  }
+  if (swig_obj[2]) {
+    ecode3 = SWIG_AsVal_int(swig_obj[2], &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "svlock_release" "', argument " "3"" of type '" "pid_t""'");
+    } 
+    arg3 = (pid_t)(val3);
+  }
+  if (swig_obj[3]) {
+    ecode4 = SWIG_AsVal_long(swig_obj[3], &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "svlock_release" "', argument " "4"" of type '" "time_t""'");
+    } 
+    arg4 = (time_t)(val4);
+  }
+  result = (int)svlock_release(arg1,arg2,arg3,arg4);
   resultobj = SWIG_From_int((int)(result));
   return resultobj;
 fail:
@@ -3371,20 +3595,51 @@ fail:
 
 SWIGINTERN PyObject *_wrap_svlock_getvalue(PyObject *self, PyObject *args) {
   PyObject *resultobj = 0;
-  int arg1 ;
+  int arg1 = (int) 0 ;
+  pid_t arg2 = (pid_t) 0 ;
+  pid_t arg3 = (pid_t) 0 ;
+  time_t arg4 = (time_t) 0 ;
   int val1 ;
   int ecode1 = 0 ;
-  PyObject *swig_obj[1] ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  long val4 ;
+  int ecode4 = 0 ;
+  PyObject *swig_obj[4] ;
   int result;
   
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  ecode1 = SWIG_AsVal_int(swig_obj[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "svlock_getvalue" "', argument " "1"" of type '" "int""'");
-  } 
-  arg1 = (int)(val1);
-  result = (int)svlock_getvalue(arg1);
+  if (!SWIG_Python_UnpackTuple(args, "svlock_getvalue", 0, 4, swig_obj)) SWIG_fail;
+  if (swig_obj[0]) {
+    ecode1 = SWIG_AsVal_int(swig_obj[0], &val1);
+    if (!SWIG_IsOK(ecode1)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "svlock_getvalue" "', argument " "1"" of type '" "int""'");
+    } 
+    arg1 = (int)(val1);
+  }
+  if (swig_obj[1]) {
+    ecode2 = SWIG_AsVal_int(swig_obj[1], &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "svlock_getvalue" "', argument " "2"" of type '" "pid_t""'");
+    } 
+    arg2 = (pid_t)(val2);
+  }
+  if (swig_obj[2]) {
+    ecode3 = SWIG_AsVal_int(swig_obj[2], &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "svlock_getvalue" "', argument " "3"" of type '" "pid_t""'");
+    } 
+    arg3 = (pid_t)(val3);
+  }
+  if (swig_obj[3]) {
+    ecode4 = SWIG_AsVal_long(swig_obj[3], &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "svlock_getvalue" "', argument " "4"" of type '" "time_t""'");
+    } 
+    arg4 = (time_t)(val4);
+  }
+  result = (int)svlock_getvalue(arg1,arg2,arg3,arg4);
   resultobj = SWIG_From_int((int)(result));
   return resultobj;
 fail:
@@ -3394,20 +3649,51 @@ fail:
 
 SWIGINTERN PyObject *_wrap_svlock_get_value(PyObject *self, PyObject *args) {
   PyObject *resultobj = 0;
-  int arg1 ;
+  int arg1 = (int) 0 ;
+  pid_t arg2 = (pid_t) 0 ;
+  pid_t arg3 = (pid_t) 0 ;
+  time_t arg4 = (time_t) 0 ;
   int val1 ;
   int ecode1 = 0 ;
-  PyObject *swig_obj[1] ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  long val4 ;
+  int ecode4 = 0 ;
+  PyObject *swig_obj[4] ;
   int result;
   
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  ecode1 = SWIG_AsVal_int(swig_obj[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "svlock_get_value" "', argument " "1"" of type '" "int""'");
-  } 
-  arg1 = (int)(val1);
-  result = (int)svlock_get_value(arg1);
+  if (!SWIG_Python_UnpackTuple(args, "svlock_get_value", 0, 4, swig_obj)) SWIG_fail;
+  if (swig_obj[0]) {
+    ecode1 = SWIG_AsVal_int(swig_obj[0], &val1);
+    if (!SWIG_IsOK(ecode1)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "svlock_get_value" "', argument " "1"" of type '" "int""'");
+    } 
+    arg1 = (int)(val1);
+  }
+  if (swig_obj[1]) {
+    ecode2 = SWIG_AsVal_int(swig_obj[1], &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "svlock_get_value" "', argument " "2"" of type '" "pid_t""'");
+    } 
+    arg2 = (pid_t)(val2);
+  }
+  if (swig_obj[2]) {
+    ecode3 = SWIG_AsVal_int(swig_obj[2], &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "svlock_get_value" "', argument " "3"" of type '" "pid_t""'");
+    } 
+    arg3 = (pid_t)(val3);
+  }
+  if (swig_obj[3]) {
+    ecode4 = SWIG_AsVal_long(swig_obj[3], &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "svlock_get_value" "', argument " "4"" of type '" "time_t""'");
+    } 
+    arg4 = (time_t)(val4);
+  }
+  result = (int)svlock_get_value(arg1,arg2,arg3,arg4);
   resultobj = SWIG_From_int((int)(result));
   return resultobj;
 fail:
@@ -3417,20 +3703,51 @@ fail:
 
 SWIGINTERN PyObject *_wrap_svlock_get_count(PyObject *self, PyObject *args) {
   PyObject *resultobj = 0;
-  int arg1 ;
+  int arg1 = (int) 0 ;
+  pid_t arg2 = (pid_t) 0 ;
+  pid_t arg3 = (pid_t) 0 ;
+  time_t arg4 = (time_t) 0 ;
   int val1 ;
   int ecode1 = 0 ;
-  PyObject *swig_obj[1] ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  long val4 ;
+  int ecode4 = 0 ;
+  PyObject *swig_obj[4] ;
   int result;
   
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  ecode1 = SWIG_AsVal_int(swig_obj[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "svlock_get_count" "', argument " "1"" of type '" "int""'");
-  } 
-  arg1 = (int)(val1);
-  result = (int)svlock_get_count(arg1);
+  if (!SWIG_Python_UnpackTuple(args, "svlock_get_count", 0, 4, swig_obj)) SWIG_fail;
+  if (swig_obj[0]) {
+    ecode1 = SWIG_AsVal_int(swig_obj[0], &val1);
+    if (!SWIG_IsOK(ecode1)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "svlock_get_count" "', argument " "1"" of type '" "int""'");
+    } 
+    arg1 = (int)(val1);
+  }
+  if (swig_obj[1]) {
+    ecode2 = SWIG_AsVal_int(swig_obj[1], &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "svlock_get_count" "', argument " "2"" of type '" "pid_t""'");
+    } 
+    arg2 = (pid_t)(val2);
+  }
+  if (swig_obj[2]) {
+    ecode3 = SWIG_AsVal_int(swig_obj[2], &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "svlock_get_count" "', argument " "3"" of type '" "pid_t""'");
+    } 
+    arg3 = (pid_t)(val3);
+  }
+  if (swig_obj[3]) {
+    ecode4 = SWIG_AsVal_long(swig_obj[3], &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "svlock_get_count" "', argument " "4"" of type '" "time_t""'");
+    } 
+    arg4 = (time_t)(val4);
+  }
+  result = (int)svlock_get_count(arg1,arg2,arg3,arg4);
   resultobj = SWIG_From_int((int)(result));
   return resultobj;
 fail:
@@ -3440,20 +3757,51 @@ fail:
 
 SWIGINTERN PyObject *_wrap_svlock_close(PyObject *self, PyObject *args) {
   PyObject *resultobj = 0;
-  int arg1 ;
+  int arg1 = (int) 0 ;
+  pid_t arg2 = (pid_t) 0 ;
+  pid_t arg3 = (pid_t) 0 ;
+  time_t arg4 = (time_t) 0 ;
   int val1 ;
   int ecode1 = 0 ;
-  PyObject *swig_obj[1] ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  long val4 ;
+  int ecode4 = 0 ;
+  PyObject *swig_obj[4] ;
   int result;
   
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  ecode1 = SWIG_AsVal_int(swig_obj[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "svlock_close" "', argument " "1"" of type '" "int""'");
-  } 
-  arg1 = (int)(val1);
-  result = (int)svlock_close(arg1);
+  if (!SWIG_Python_UnpackTuple(args, "svlock_close", 0, 4, swig_obj)) SWIG_fail;
+  if (swig_obj[0]) {
+    ecode1 = SWIG_AsVal_int(swig_obj[0], &val1);
+    if (!SWIG_IsOK(ecode1)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "svlock_close" "', argument " "1"" of type '" "int""'");
+    } 
+    arg1 = (int)(val1);
+  }
+  if (swig_obj[1]) {
+    ecode2 = SWIG_AsVal_int(swig_obj[1], &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "svlock_close" "', argument " "2"" of type '" "pid_t""'");
+    } 
+    arg2 = (pid_t)(val2);
+  }
+  if (swig_obj[2]) {
+    ecode3 = SWIG_AsVal_int(swig_obj[2], &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "svlock_close" "', argument " "3"" of type '" "pid_t""'");
+    } 
+    arg3 = (pid_t)(val3);
+  }
+  if (swig_obj[3]) {
+    ecode4 = SWIG_AsVal_long(swig_obj[3], &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "svlock_close" "', argument " "4"" of type '" "time_t""'");
+    } 
+    arg4 = (time_t)(val4);
+  }
+  result = (int)svlock_close(arg1,arg2,arg3,arg4);
   resultobj = SWIG_From_int((int)(result));
   return resultobj;
 fail:
@@ -3489,20 +3837,51 @@ fail:
 
 SWIGINTERN PyObject *_wrap_svlock_release_all_index(PyObject *self, PyObject *args) {
   PyObject *resultobj = 0;
-  int arg1 ;
+  int arg1 = (int) 0 ;
+  pid_t arg2 = (pid_t) 0 ;
+  pid_t arg3 = (pid_t) 0 ;
+  time_t arg4 = (time_t) 0 ;
   int val1 ;
   int ecode1 = 0 ;
-  PyObject *swig_obj[1] ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  long val4 ;
+  int ecode4 = 0 ;
+  PyObject *swig_obj[4] ;
   int result;
   
-  if (!args) SWIG_fail;
-  swig_obj[0] = args;
-  ecode1 = SWIG_AsVal_int(swig_obj[0], &val1);
-  if (!SWIG_IsOK(ecode1)) {
-    SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "svlock_release_all_index" "', argument " "1"" of type '" "int""'");
-  } 
-  arg1 = (int)(val1);
-  result = (int)svlock_release_all_index(arg1);
+  if (!SWIG_Python_UnpackTuple(args, "svlock_release_all_index", 0, 4, swig_obj)) SWIG_fail;
+  if (swig_obj[0]) {
+    ecode1 = SWIG_AsVal_int(swig_obj[0], &val1);
+    if (!SWIG_IsOK(ecode1)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "svlock_release_all_index" "', argument " "1"" of type '" "int""'");
+    } 
+    arg1 = (int)(val1);
+  }
+  if (swig_obj[1]) {
+    ecode2 = SWIG_AsVal_int(swig_obj[1], &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "svlock_release_all_index" "', argument " "2"" of type '" "pid_t""'");
+    } 
+    arg2 = (pid_t)(val2);
+  }
+  if (swig_obj[2]) {
+    ecode3 = SWIG_AsVal_int(swig_obj[2], &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "svlock_release_all_index" "', argument " "3"" of type '" "pid_t""'");
+    } 
+    arg3 = (pid_t)(val3);
+  }
+  if (swig_obj[3]) {
+    ecode4 = SWIG_AsVal_long(swig_obj[3], &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "svlock_release_all_index" "', argument " "4"" of type '" "time_t""'");
+    } 
+    arg4 = (time_t)(val4);
+  }
+  result = (int)svlock_release_all_index(arg1,arg2,arg3,arg4);
   resultobj = SWIG_From_int((int)(result));
   return resultobj;
 fail:
@@ -3550,21 +3929,21 @@ fail:
 
 
 static PyMethodDef SwigMethods[] = {
-	 { "svlock_is_initialized", _wrap_svlock_is_initialized, METH_O, NULL},
-	 { "svlock_get_initialized", _wrap_svlock_get_initialized, METH_O, NULL},
+	 { "svlock_is_initialized", _wrap_svlock_is_initialized, METH_VARARGS, NULL},
+	 { "svlock_get_initialized", _wrap_svlock_get_initialized, METH_VARARGS, NULL},
 	 { "svlock_set_initialized", _wrap_svlock_set_initialized, METH_VARARGS, NULL},
 	 { "svlock_shm_open", _wrap_svlock_shm_open, METH_NOARGS, NULL},
 	 { "svlock_init_index", _wrap_svlock_init_index, METH_VARARGS, NULL},
-	 { "svlock_init", _wrap_svlock_init, METH_O, NULL},
-	 { "svlock_acquire", _wrap_svlock_acquire, METH_O, NULL},
-	 { "svlock_release", _wrap_svlock_release, METH_O, NULL},
-	 { "svlock_getvalue", _wrap_svlock_getvalue, METH_O, NULL},
-	 { "svlock_get_value", _wrap_svlock_get_value, METH_O, NULL},
-	 { "svlock_get_count", _wrap_svlock_get_count, METH_O, NULL},
-	 { "svlock_close", _wrap_svlock_close, METH_O, NULL},
+	 { "svlock_init", _wrap_svlock_init, METH_VARARGS, NULL},
+	 { "svlock_acquire", _wrap_svlock_acquire, METH_VARARGS, NULL},
+	 { "svlock_release", _wrap_svlock_release, METH_VARARGS, NULL},
+	 { "svlock_getvalue", _wrap_svlock_getvalue, METH_VARARGS, NULL},
+	 { "svlock_get_value", _wrap_svlock_get_value, METH_VARARGS, NULL},
+	 { "svlock_get_count", _wrap_svlock_get_count, METH_VARARGS, NULL},
+	 { "svlock_close", _wrap_svlock_close, METH_VARARGS, NULL},
 	 { "svlock_unlink", _wrap_svlock_unlink, METH_NOARGS, NULL},
 	 { "svlock_release_all", _wrap_svlock_release_all, METH_NOARGS, NULL},
-	 { "svlock_release_all_index", _wrap_svlock_release_all_index, METH_O, NULL},
+	 { "svlock_release_all_index", _wrap_svlock_release_all_index, METH_VARARGS, NULL},
 	 { "svlock_close_all", _wrap_svlock_close_all, METH_NOARGS, NULL},
 	 { "svlock_cleanup", _wrap_svlock_cleanup, METH_NOARGS, NULL},
 	 { "svlock_shm_close", _wrap_svlock_shm_close, METH_NOARGS, NULL},
@@ -3575,18 +3954,20 @@ static PyMethodDef SwigMethods[] = {
 /* -------- TYPE CONVERSION AND EQUIVALENCE RULES (BEGIN) -------- */
 
 static swig_type_info _swigt__p_char = {"_p_char", "char *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_int = {"_p_int", "int32_t *|int_fast16_t *|int_fast32_t *|int_least32_t *|intptr_t *|int *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_int = {"_p_int", "int32_t *|int_fast16_t *|int_fast32_t *|int_least32_t *|intptr_t *|pid_t *|int *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_long = {"_p_long", "time_t *|long *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_long_long = {"_p_long_long", "int64_t *|int_fast64_t *|int_least64_t *|intmax_t *|long long *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_short = {"_p_short", "int16_t *|int_least16_t *|short *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_signed_char = {"_p_signed_char", "int8_t *|int_fast8_t *|int_least8_t *|signed char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_unsigned_char = {"_p_unsigned_char", "uint8_t *|uint_fast8_t *|uint_least8_t *|unsigned char *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_unsigned_int = {"_p_unsigned_int", "uint32_t *|uint_fast16_t *|uint_fast32_t *|uint_least32_t *|uintptr_t *|unsigned int *", 0, 0, (void*)0, 0};
-static swig_type_info _swigt__p_unsigned_long_long = {"_p_unsigned_long_long", "off_t *|uint64_t *|uint_fast64_t *|uint_least64_t *|uintmax_t *|unsigned long long *", 0, 0, (void*)0, 0};
+static swig_type_info _swigt__p_unsigned_long_long = {"_p_unsigned_long_long", "uint64_t *|uint_fast64_t *|uint_least64_t *|uintmax_t *|unsigned long long *", 0, 0, (void*)0, 0};
 static swig_type_info _swigt__p_unsigned_short = {"_p_unsigned_short", "uint16_t *|uint_least16_t *|unsigned short *", 0, 0, (void*)0, 0};
 
 static swig_type_info *swig_type_initial[] = {
   &_swigt__p_char,
   &_swigt__p_int,
+  &_swigt__p_long,
   &_swigt__p_long_long,
   &_swigt__p_short,
   &_swigt__p_signed_char,
@@ -3598,6 +3979,7 @@ static swig_type_info *swig_type_initial[] = {
 
 static swig_cast_info _swigc__p_char[] = {  {&_swigt__p_char, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_int[] = {  {&_swigt__p_int, 0, 0, 0},{0, 0, 0, 0}};
+static swig_cast_info _swigc__p_long[] = {  {&_swigt__p_long, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_long_long[] = {  {&_swigt__p_long_long, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_short[] = {  {&_swigt__p_short, 0, 0, 0},{0, 0, 0, 0}};
 static swig_cast_info _swigc__p_signed_char[] = {  {&_swigt__p_signed_char, 0, 0, 0},{0, 0, 0, 0}};
@@ -3609,6 +3991,7 @@ static swig_cast_info _swigc__p_unsigned_short[] = {  {&_swigt__p_unsigned_short
 static swig_cast_info *swig_cast_initial[] = {
   _swigc__p_char,
   _swigc__p_int,
+  _swigc__p_long,
   _swigc__p_long_long,
   _swigc__p_short,
   _swigc__p_signed_char,

@@ -59,41 +59,41 @@ class _SwigNonDynamicMeta(type):
 
 
 
-def svlock_is_initialized(index):
-    return _svlock.svlock_is_initialized(index)
+def svlock_is_initialized(index=0, pid=0, tid=0, duration=0):
+    return _svlock.svlock_is_initialized(index, pid, tid, duration)
 
-def svlock_get_initialized(index):
-    return _svlock.svlock_get_initialized(index)
+def svlock_get_initialized(index=0, pid=0, tid=0, duration=0):
+    return _svlock.svlock_get_initialized(index, pid, tid, duration)
 
-def svlock_set_initialized(index, value):
-    return _svlock.svlock_set_initialized(index, value)
+def svlock_set_initialized(index=0, value=0, pid=0, tid=0, duration=0):
+    return _svlock.svlock_set_initialized(index, value, pid, tid, duration)
 
 def svlock_shm_open():
     return _svlock.svlock_shm_open()
 
-def svlock_init_index(index, value):
-    return _svlock.svlock_init_index(index, value)
+def svlock_init_index(index=0, value=0, pid=0, tid=0, duration=0):
+    return _svlock.svlock_init_index(index, value, pid, tid, duration)
 
-def svlock_init(count):
-    return _svlock.svlock_init(count)
+def svlock_init(value=0, pid=0, tid=0, duration=0):
+    return _svlock.svlock_init(value, pid, tid, duration)
 
-def svlock_acquire(index):
-    return _svlock.svlock_acquire(index)
+def svlock_acquire(index=0, pid=0, tid=0, duration=0):
+    return _svlock.svlock_acquire(index, pid, tid, duration)
 
-def svlock_release(index):
-    return _svlock.svlock_release(index)
+def svlock_release(index=0, pid=0, tid=0, duration=0):
+    return _svlock.svlock_release(index, pid, tid, duration)
 
-def svlock_getvalue(index):
-    return _svlock.svlock_getvalue(index)
+def svlock_getvalue(index=0, pid=0, tid=0, duration=0):
+    return _svlock.svlock_getvalue(index, pid, tid, duration)
 
-def svlock_get_value(index):
-    return _svlock.svlock_get_value(index)
+def svlock_get_value(index=0, pid=0, tid=0, duration=0):
+    return _svlock.svlock_get_value(index, pid, tid, duration)
 
-def svlock_get_count(index):
-    return _svlock.svlock_get_count(index)
+def svlock_get_count(index=0, pid=0, tid=0, duration=0):
+    return _svlock.svlock_get_count(index, pid, tid, duration)
 
-def svlock_close(index):
-    return _svlock.svlock_close(index)
+def svlock_close(index=0, pid=0, tid=0, duration=0):
+    return _svlock.svlock_close(index, pid, tid, duration)
 
 def svlock_unlink():
     return _svlock.svlock_unlink()
@@ -101,8 +101,8 @@ def svlock_unlink():
 def svlock_release_all():
     return _svlock.svlock_release_all()
 
-def svlock_release_all_index(index):
-    return _svlock.svlock_release_all_index(index)
+def svlock_release_all_index(index=0, pid=0, tid=0, duration=0):
+    return _svlock.svlock_release_all_index(index, pid, tid, duration)
 
 def svlock_close_all():
     return _svlock.svlock_close_all()

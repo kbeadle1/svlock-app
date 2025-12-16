@@ -33,7 +33,7 @@ typedef struct svlock_t
 int __svlock_fd;
 svlock_t *__svlock = NULL;
 
-int svlock_is_initialized(int index)
+int svlock_is_initialized(int index, pid_t pid, pid_t tid, time_t duration)
 {
     int ret = 0;
 
@@ -57,7 +57,7 @@ int svlock_is_initialized(int index)
         if (elapsed_time >= SVLOCK_MAX_HOLD_TIME)
         {
             //__svlock->initialized[index] = 0;
-            svlock_release_all_index(index);
+            svlock_release_all_index(index, 0, 0, 0);
             return 0;
         }
         return 1;
@@ -65,7 +65,7 @@ int svlock_is_initialized(int index)
     return 0;
 }
 
-int svlock_get_value(int index)
+int svlock_get_value(int index, pid_t pid, pid_t tid, time_t duration)
 {
     int ret = 0;
 
@@ -79,7 +79,7 @@ int svlock_get_value(int index)
     return __svlock->value[index];
 }
 
-int svlock_get_count(int index)
+int svlock_get_count(int index, pid_t pid, pid_t tid, time_t duration)
 {
     int ret = 0;
 
@@ -98,7 +98,7 @@ int svlock_get_count(int index)
     return __svlock->count[index];
 }
 
-int svlock_get_initialized(int index)
+int svlock_get_initialized(int index, pid_t pid, pid_t tid, time_t duration)
 {
     int ret = 0;
 
@@ -112,7 +112,7 @@ int svlock_get_initialized(int index)
     return __svlock->initialized[index];
 }
 
-int svlock_set_initialized(int index, int value)
+int svlock_set_initialized(int index, int value, pid_t pid, pid_t tid, time_t duration)
 {
     int ret = 0;
 
@@ -149,7 +149,7 @@ int svlock_shm_open(void)
     return 0;
 }
 
-int svlock_init_index(int index, int value)
+int svlock_init_index(int index, int value, pid_t pid, pid_t tid, time_t duration)
 {
     int ret = 0;
 
@@ -169,7 +169,7 @@ int svlock_init_index(int index, int value)
         }
     }
 
-    //if (!svlock_is_initialized(index))
+    //if (!svlock_is_initialized(index, 0, 0, 0))
     if (!__svlock->initialized[index])
     {
         // Initialize semaphores as process-shared with value
@@ -191,7 +191,7 @@ int svlock_init_index(int index, int value)
     return 0; 
 }
 
-int svlock_init(int value)
+int svlock_init(int value, pid_t pid, pid_t tid, time_t duration)
 {
     int ret = 0;
     int index = 0;
@@ -211,7 +211,7 @@ int svlock_init(int value)
     // Get next open semaphore slot
     for (int i = 0; i < SVLOCK_MAX_SEMAPHORES; i++)
     {
-        //if (!svlock_is_initialized(index))
+        //if (!svlock_is_initialized(index, 0, 0, 0))
         if (!__svlock->initialized[index])
         {
             index = i;
@@ -219,12 +219,12 @@ int svlock_init(int value)
         }
     }
 
-    svlock_init_index(index, value);
+    svlock_init_index(index, value, 0, 0, 0);
 
     return index;
 }
 
-int svlock_acquire(int index)
+int svlock_acquire(int index, pid_t pid, pid_t tid, time_t duration)
 {
     int ret = 0;
 
@@ -242,7 +242,7 @@ int svlock_acquire(int index)
 
     if (!__svlock->initialized[index])
     {
-        svlock_init_index(index, 1);
+        svlock_init_index(index, 1, 0, 0, 0);
     }
 
     __svlock->count[index]++;
@@ -271,7 +271,7 @@ int svlock_acquire(int index)
     return ret;
 }
 
-int svlock_release(int index)
+int svlock_release(int index, pid_t pid, pid_t tid, time_t duration)
 {
     int ret = 0;
 
@@ -302,7 +302,7 @@ int svlock_release(int index)
     return ret;
 }
 
-int svlock_getvalue(int index)
+int svlock_getvalue(int index, pid_t pid, pid_t tid, time_t duration)
 {
     int ret = 0;
     int value = 0;
@@ -334,7 +334,7 @@ int svlock_getvalue(int index)
     return value;
 }
 
-int svlock_close(int index)
+int svlock_close(int index, pid_t pid, pid_t tid, time_t duration)
 {
     int ret = 0;
 
@@ -381,20 +381,20 @@ int svlock_release_all(void)
 
     for (int i = 0; i < SVLOCK_MAX_SEMAPHORES; i++)
     {  
-        value = svlock_getvalue(i);
+        value = svlock_getvalue(i, 0, 0, 0);
         while (value == 0)
         {
-            svlock_release(i);
+            svlock_release(i, 0, 0, 0);
             // Give some time for semaphore to refresh value
             usleep(100000);
-            value = svlock_getvalue(i);
+            value = svlock_getvalue(i, 0, 0, 0);
         }
     }
 
     return 0;
 }
 
-int svlock_release_all_index(int index)
+int svlock_release_all_index(int index, pid_t pid, pid_t tid, time_t duration)
 {
     int value = 0;
 
@@ -402,14 +402,14 @@ int svlock_release_all_index(int index)
         svlock_shm_open();
     }
 
-    value = svlock_getvalue(index);
+    value = svlock_getvalue(index, 0, 0, 0);
 
     while (value == 0)
     {
-        svlock_release(index);
+        svlock_release(index, 0, 0, 0);
         // Give time for semaphore to refresh value
         usleep(100000);
-        value = svlock_getvalue(index);
+        value = svlock_getvalue(index, 0, 0, 0);
     }
 
     return 0;
@@ -429,7 +429,7 @@ int svlock_close_all(void)
 
 
     for (int i = 0; i < SVLOCK_MAX_SEMAPHORES; i++) {
-        svlock_close(i);
+        svlock_close(i, 0, 0, 0);
     }
 
     return 0;

@@ -8,68 +8,26 @@
 #include "../svlock/svlock.h"
 %}
 
-typedef unsigned long long off_t;
+typedef int pid_t;
+typedef long int time_t;
 
-/* Need this for the pointer to arrary of strings returned from svlock_topo_get_*_names() */
-
-%typemap(in) char *** (char **temp) {
-/* char *** in */
-
-if (PyList_Check($input)) {
-	int size = PyList_Size($input);
-	/* Empty the list */
-	PyList_SetSlice($input,0,size,NULL);
-	size = PyList_Size($input);
-} else {
-	PyErr_SetString(PyExc_TypeError,"not a list");
-	return NULL;
-}
-
-arg1 = &temp;
-}
-
-%typemap(argout,fragment="SWIG_FromCharPtr") char ***{
-int i;
-PyObject *resstr;
-
-/* char *** out */
-
-for(i=0;i<result;i++) {
-	resstr = SWIG_FromCharPtr(temp$argnum[i]);
-	PyList_Append($input,resstr);
-	}
-}
-
-/* This is needed for svlock_topo_get_thread_name_by_apic_id() */
-%typemap(argout) (int apic_id, char *result, size_t res_size) {
-/* svlock_topo_get_thread_name_by_apic_id out */
-Py_XDECREF($result);
-
-$result = PyBytes_FromStringAndSize($2,strlen($2));
-}
-
-/* This is needed for svlock_topo_get_mmconfig_by_domain() */
-%apply uint64_t *OUTPUT { uint64_t *base, uint64_t *len }
-
-/* This is needed for svlock_cpuid() */
-%apply uint32_t *OUTPUT { uint32_t *eax, uint32_t *ebx, uint32_t *ecx, uint32_t *edx }
-
-/* These are needed for svlock_read_phys_mem_*_bytes() and svlock_reg_*() */
-%apply uint8_t *OUTPUT { uint8_t *value }
-%apply uint16_t *OUTPUT { uint16_t *value }
-%apply uint32_t *OUTPUT { uint32_t *value }
-%apply uint64_t *OUTPUT { uint64_t *value }
-
-/* These are needed for svlock_topo_get_pci_data() */
-%typemap(argout) (const char *pcidev_name, struct pci_data *data) {
-/* svlock_topo_get_pci_data out */
-}
-%apply struct pci_data *OUTPUT { const char *pcidev_name, struct pci_data *data }
-
-/* These are needed for svlock_topo_get_*_data() */
-%typemap(argout) (const char *target_name, struct target_data *data) {
-/* svlock_topo_get_target_data out */
-}
-%apply struct target_data *OUTPUT { const char *target_name, struct target_data *data }
+int svlock_is_initialized(int index=0, pid_t pid=0, pid_t tid=0, time_t duration=0);
+int svlock_get_initialized(int index=0, pid_t pid=0, pid_t tid=0, time_t duration=0);
+int svlock_set_initialized(int index=0, int value=0, pid_t pid=0, pid_t tid=0, time_t duration=0);
+int svlock_shm_open(void);
+int svlock_init_index(int index=0, int value=0, pid_t pid=0, pid_t tid=0, time_t duration=0);
+int svlock_init(int value=0, pid_t pid=0, pid_t tid=0, time_t duration=0);
+int svlock_acquire(int index=0, pid_t pid=0, pid_t tid=0, time_t duration=0);
+int svlock_release(int index=0, pid_t pid=0, pid_t tid=0, time_t duration=0);
+int svlock_getvalue(int index=0, pid_t pid=0, pid_t tid=0, time_t duration=0);
+int svlock_get_value(int index=0, pid_t pid=0, pid_t tid=0, time_t duration=0);
+int svlock_get_count(int index=0, pid_t pid=0, pid_t tid=0, time_t duration=0);
+int svlock_close(int index=0, pid_t pid=0, pid_t tid=0, time_t duration=0);
+int svlock_unlink(void);
+int svlock_release_all(void);
+int svlock_release_all_index(int index=0, pid_t pid=0, pid_t tid=0, time_t duration=0);
+int svlock_close_all(void);
+int svlock_cleanup(void);
+int svlock_shm_close(void);
 
 %include "svlock.i"
