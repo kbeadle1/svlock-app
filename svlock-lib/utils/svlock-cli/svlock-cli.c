@@ -13,6 +13,8 @@ static bool display_semaphore_count(void);
 static bool display_acquire_semaphore(void);
 static bool display_release_semaphore(void);
 static bool display_release_all_semaphore(void);
+static bool display_set_semaphore(void);
+static bool display_set_all_semaphore(void);
 
 struct output_selection {
     bool (*want_selection)(void);
@@ -25,6 +27,8 @@ struct output_selection output_selections[] = {
     { want_display_acquire_semaphore,     display_acquire_semaphore },
     { want_display_release_semaphore,     display_release_semaphore },
     { want_display_release_all_semaphore,     display_release_all_semaphore },
+    { want_display_set_semaphore,     display_set_semaphore },
+    { want_display_set_all_semaphore,     display_set_all_semaphore },
 };
 
 int main(int argc, char *argv[])
@@ -114,6 +118,38 @@ static bool display_release_all_semaphore(void)
 
     semaphore_index = get_semaphore_index();
     svlock_release_all();
+    usleep(100000);
+    semaphore_value = svlock_getvalue(semaphore_index, 0, 0, 0);
+
+    printf("semaphore[%d] value = %d\n", semaphore_index, semaphore_value);
+
+    return true;
+}
+
+static bool display_set_semaphore(void)
+{
+    int semaphore_index = 0;
+    int semaphore_value = 0;
+
+    semaphore_index = get_semaphore_index();
+    semaphore_value = get_semaphore_value();
+    svlock_set_value(semaphore_index, semaphore_value, 0, 0, 0);
+    usleep(100000);
+    semaphore_value = svlock_getvalue(semaphore_index, 0, 0, 0);
+
+    printf("semaphore[%d] value = %d\n", semaphore_index, semaphore_value);
+
+    return true;
+}
+
+static bool display_set_all_semaphore(void)
+{
+    int semaphore_index = 0;
+    int semaphore_value = 0;
+
+    semaphore_index = get_semaphore_index();
+    semaphore_value = get_semaphore_value();
+    svlock_set_value_all(semaphore_value, 0, 0, 0);
     semaphore_value = svlock_getvalue(semaphore_index, 0, 0, 0);
 
     printf("semaphore[%d] value = %d\n", semaphore_index, semaphore_value);

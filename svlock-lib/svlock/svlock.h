@@ -33,6 +33,8 @@ int svlock_close(int index, pid_t pid, pid_t tid, time_t duration);
 int svlock_unlink(void);
 int svlock_release_all(void);
 int svlock_release_all_index(int index, pid_t pid, pid_t tid, time_t duration);
+int svlock_set_value(int index, int value, pid_t pid, pid_t tid, time_t duration);
+int svlock_set_value_all(int value, pid_t pid, pid_t tid, time_t duration);
 int svlock_close_all(void);
 int svlock_cleanup(void);
 int svlock_shm_close(void);

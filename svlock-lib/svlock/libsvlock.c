@@ -396,24 +396,105 @@ int svlock_release_all(void)
 
 int svlock_release_all_index(int index, pid_t pid, pid_t tid, time_t duration)
 {
-    int value = 0;
+    int curr_value = 0;
 
     if (!__svlock) {
         svlock_shm_open();
     }
 
-    value = svlock_getvalue(index, 0, 0, 0);
+    curr_value = svlock_getvalue(index, 0, 0, 0);
 
-    while (value == 0)
+    while (curr_value == 0)
     {
         svlock_release(index, 0, 0, 0);
         // Give time for semaphore to refresh value
         usleep(100000);
-        value = svlock_getvalue(index, 0, 0, 0);
+        curr_value = svlock_getvalue(index, 0, 0, 0);
     }
 
     return 0;
 }
+
+int svlock_set_value(int index, int value, pid_t pid, pid_t tid, time_t duration)
+{
+    int curr_value = 0;
+
+    if (value <= 0) {
+        // value must be greater than 0
+        return -1;
+    }
+
+    if (!__svlock) {
+        svlock_shm_open();
+    }
+
+    curr_value = svlock_getvalue(index, 0, 0, 0);
+
+    if (curr_value < 0) {
+        svlock_init_index(index, value, 0, 0, 0);
+        usleep(100000);
+        curr_value = svlock_getvalue(index, 0, 0, 0);
+    }
+
+    while (curr_value > value)
+    {
+        svlock_acquire(index, 0, 0, 0);
+        usleep(100000);
+        curr_value = svlock_getvalue(index, 0, 0, 0);
+    }
+
+    while (curr_value < value)
+    {
+        svlock_release(index, 0, 0, 0);
+        usleep(100000);
+        curr_value = svlock_getvalue(index, 0, 0, 0);
+    }
+
+    __svlock->value[index] = value;
+
+    return 0;
+}
+
+int svlock_set_value_all(int value, pid_t pid, pid_t tid, time_t duration)
+{
+    int curr_value = 0;
+
+    if (!__svlock) {
+        svlock_shm_open();
+    }
+
+
+    for (int i = 0; i < SVLOCK_MAX_SEMAPHORES; i++)
+    {  
+        curr_value = svlock_getvalue(i, 0, 0, 0);
+
+        if (curr_value < 0) {
+            svlock_init_index(i, value, 0, 0, 0);
+            usleep(100000);
+            curr_value = svlock_getvalue(i, 0, 0, 0);
+        }
+
+
+        while (curr_value > value)
+        {
+            svlock_acquire(i, 0, 0, 0);
+            usleep(100000);
+            curr_value = svlock_getvalue(i, 0, 0, 0);
+        }
+
+        while (curr_value < value)
+        {
+            svlock_release(i, 0, 0, 0);
+            usleep(100000);
+            curr_value = svlock_getvalue(i, 0, 0, 0);
+        }
+
+        __svlock->value[i] = value;
+    }
+
+    return 0;
+}
+
 
 int svlock_close_all(void)
 {

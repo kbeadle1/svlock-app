@@ -104,6 +104,12 @@ def svlock_release_all():
 def svlock_release_all_index(index=0, pid=0, tid=0, duration=0):
     return _svlock.svlock_release_all_index(index, pid, tid, duration)
 
+def svlock_set_value(index=0, value=0, pid=0, tid=0, duration=0):
+    return _svlock.svlock_set_value(index, value, pid, tid, duration)
+
+def svlock_set_value_all(value=0, pid=0, tid=0, duration=0):
+    return _svlock.svlock_set_value_all(value, pid, tid, duration)
+
 def svlock_close_all():
     return _svlock.svlock_close_all()
 

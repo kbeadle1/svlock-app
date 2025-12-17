@@ -3889,6 +3889,124 @@ fail:
 }
 
 
+SWIGINTERN PyObject *_wrap_svlock_set_value(PyObject *self, PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 = (int) 0 ;
+  int arg2 = (int) 0 ;
+  pid_t arg3 = (pid_t) 0 ;
+  pid_t arg4 = (pid_t) 0 ;
+  time_t arg5 = (time_t) 0 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  int val4 ;
+  int ecode4 = 0 ;
+  long val5 ;
+  int ecode5 = 0 ;
+  PyObject *swig_obj[5] ;
+  int result;
+  
+  if (!SWIG_Python_UnpackTuple(args, "svlock_set_value", 0, 5, swig_obj)) SWIG_fail;
+  if (swig_obj[0]) {
+    ecode1 = SWIG_AsVal_int(swig_obj[0], &val1);
+    if (!SWIG_IsOK(ecode1)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "svlock_set_value" "', argument " "1"" of type '" "int""'");
+    } 
+    arg1 = (int)(val1);
+  }
+  if (swig_obj[1]) {
+    ecode2 = SWIG_AsVal_int(swig_obj[1], &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "svlock_set_value" "', argument " "2"" of type '" "int""'");
+    } 
+    arg2 = (int)(val2);
+  }
+  if (swig_obj[2]) {
+    ecode3 = SWIG_AsVal_int(swig_obj[2], &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "svlock_set_value" "', argument " "3"" of type '" "pid_t""'");
+    } 
+    arg3 = (pid_t)(val3);
+  }
+  if (swig_obj[3]) {
+    ecode4 = SWIG_AsVal_int(swig_obj[3], &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "svlock_set_value" "', argument " "4"" of type '" "pid_t""'");
+    } 
+    arg4 = (pid_t)(val4);
+  }
+  if (swig_obj[4]) {
+    ecode5 = SWIG_AsVal_long(swig_obj[4], &val5);
+    if (!SWIG_IsOK(ecode5)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode5), "in method '" "svlock_set_value" "', argument " "5"" of type '" "time_t""'");
+    } 
+    arg5 = (time_t)(val5);
+  }
+  result = (int)svlock_set_value(arg1,arg2,arg3,arg4,arg5);
+  resultobj = SWIG_From_int((int)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
+SWIGINTERN PyObject *_wrap_svlock_set_value_all(PyObject *self, PyObject *args) {
+  PyObject *resultobj = 0;
+  int arg1 = (int) 0 ;
+  pid_t arg2 = (pid_t) 0 ;
+  pid_t arg3 = (pid_t) 0 ;
+  time_t arg4 = (time_t) 0 ;
+  int val1 ;
+  int ecode1 = 0 ;
+  int val2 ;
+  int ecode2 = 0 ;
+  int val3 ;
+  int ecode3 = 0 ;
+  long val4 ;
+  int ecode4 = 0 ;
+  PyObject *swig_obj[4] ;
+  int result;
+  
+  if (!SWIG_Python_UnpackTuple(args, "svlock_set_value_all", 0, 4, swig_obj)) SWIG_fail;
+  if (swig_obj[0]) {
+    ecode1 = SWIG_AsVal_int(swig_obj[0], &val1);
+    if (!SWIG_IsOK(ecode1)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode1), "in method '" "svlock_set_value_all" "', argument " "1"" of type '" "int""'");
+    } 
+    arg1 = (int)(val1);
+  }
+  if (swig_obj[1]) {
+    ecode2 = SWIG_AsVal_int(swig_obj[1], &val2);
+    if (!SWIG_IsOK(ecode2)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode2), "in method '" "svlock_set_value_all" "', argument " "2"" of type '" "pid_t""'");
+    } 
+    arg2 = (pid_t)(val2);
+  }
+  if (swig_obj[2]) {
+    ecode3 = SWIG_AsVal_int(swig_obj[2], &val3);
+    if (!SWIG_IsOK(ecode3)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode3), "in method '" "svlock_set_value_all" "', argument " "3"" of type '" "pid_t""'");
+    } 
+    arg3 = (pid_t)(val3);
+  }
+  if (swig_obj[3]) {
+    ecode4 = SWIG_AsVal_long(swig_obj[3], &val4);
+    if (!SWIG_IsOK(ecode4)) {
+      SWIG_exception_fail(SWIG_ArgError(ecode4), "in method '" "svlock_set_value_all" "', argument " "4"" of type '" "time_t""'");
+    } 
+    arg4 = (time_t)(val4);
+  }
+  result = (int)svlock_set_value_all(arg1,arg2,arg3,arg4);
+  resultobj = SWIG_From_int((int)(result));
+  return resultobj;
+fail:
+  return NULL;
+}
+
+
 SWIGINTERN PyObject *_wrap_svlock_close_all(PyObject *self, PyObject *args) {
   PyObject *resultobj = 0;
   int result;
@@ -3944,6 +4062,8 @@ static PyMethodDef SwigMethods[] = {
 	 { "svlock_unlink", _wrap_svlock_unlink, METH_NOARGS, NULL},
 	 { "svlock_release_all", _wrap_svlock_release_all, METH_NOARGS, NULL},
 	 { "svlock_release_all_index", _wrap_svlock_release_all_index, METH_VARARGS, NULL},
+	 { "svlock_set_value", _wrap_svlock_set_value, METH_VARARGS, NULL},
+	 { "svlock_set_value_all", _wrap_svlock_set_value_all, METH_VARARGS, NULL},
 	 { "svlock_close_all", _wrap_svlock_close_all, METH_NOARGS, NULL},
 	 { "svlock_cleanup", _wrap_svlock_cleanup, METH_NOARGS, NULL},
 	 { "svlock_shm_close", _wrap_svlock_shm_close, METH_NOARGS, NULL},
